@@ -1,7 +1,15 @@
 package com.slilio.sql2codeInit.builder;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.slilio.sql2codeInit.bean.Constants;
+import com.slilio.sql2codeInit.bean.FieldInfo;
+import com.slilio.sql2codeInit.bean.TableInfo;
 import com.slilio.sql2codeInit.utils.PropertiesUtils;
+import com.slilio.sql2codeInit.utils.StringUtils;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +22,8 @@ public class BuildTable {
 
   // 获取表和注释
   private static String SQL_SHOW_TABLE_STATUS = "SHOW TABLE STATUS";
+  // 获取表字段
+  private static String SQL_SHOW_TABLE_FIELDS = "SHOW FULL FIELDS FROM %s";
 
   // 初始化
   static {
@@ -33,14 +43,50 @@ public class BuildTable {
   public static void getTables() {
     PreparedStatement preparedStatement = null;
     ResultSet tableResult = null;
+    // 表信息
+    List<TableInfo> tableInfoList = new ArrayList<>();
+
     try {
       preparedStatement = connection.prepareStatement(SQL_SHOW_TABLE_STATUS);
       tableResult = preparedStatement.executeQuery();
+
       // 遍历
       while (tableResult.next()) {
+        // 表名
         String tableName = tableResult.getString("name");
+        // 表注释
         String comment = tableResult.getString("comment");
-        logger.info("tableName:{}, comment:{}", tableName, comment);
+
+        // 表名处理为对象名 table_product_info -> ProductInfo
+        String beanName = tableName;
+        if (Constants.IGNORE_TABLE_PREFIX) {
+          beanName = tableName.substring(beanName.indexOf("_") + 1);
+        }
+        //        logger.info("表名转换前：beanName：{}", beanName);
+
+        beanName = processFiled(beanName, true);
+
+        //        logger.info("表名转换后：beanName：{}", beanName);
+
+        // 封装
+        TableInfo tableInfo = new TableInfo();
+
+        tableInfo.setTableName(tableName);
+        tableInfo.setBeanName(beanName);
+        tableInfo.setComment(comment);
+        tableInfo.setBeanParamName(beanName + Constants.SUFFIX_BEAN_PARAM);
+
+        logger.info(
+            "表名：{}，表备注：{}，表Bean：{}，表BeanParam：{}",
+            tableInfo.getTableName(),
+            tableInfo.getComment(),
+            tableInfo.getBeanName(),
+            tableInfo.getBeanParamName());
+
+        // 调取字段信息
+        List<FieldInfo> fieldInfoList = readFieldInfo(tableInfo);
+
+        logger.info(JSONObject.toJSONString(fieldInfoList));
       }
     } catch (Exception e) {
       logger.error("读取表失败：", e);
@@ -68,6 +114,115 @@ public class BuildTable {
           e.printStackTrace();
         }
       }
+    }
+  }
+
+  //  驼峰转化
+  private static String processFiled(String field, Boolean upperCaseFirstLetter) {
+    StringBuffer sb = new StringBuffer();
+    String[] fields = field.split("_");
+
+    // 首字母
+    sb.append(upperCaseFirstLetter ? StringUtils.upperCaseFirstLetter(fields[0]) : fields[0]);
+    // 其他词
+    for (int i = 1; i < fields.length; i++) {
+      sb.append(StringUtils.upperCaseFirstLetter(fields[i]));
+    }
+    return sb.toString();
+  }
+
+  // 表字段
+  private static List<FieldInfo> readFieldInfo(TableInfo tableInfo) {
+    PreparedStatement preparedStatement = null;
+    ResultSet fieldResult = null;
+    // 表信息
+    List<FieldInfo> fieldInfoList = new ArrayList<>();
+    try {
+      preparedStatement =
+          connection.prepareStatement(
+              String.format(SQL_SHOW_TABLE_FIELDS, tableInfo.getTableName()));
+      fieldResult = preparedStatement.executeQuery();
+
+      // 遍历
+      while (fieldResult.next()) {
+        // 字段
+        String field = fieldResult.getString("field");
+        // 类型
+        String type = fieldResult.getString("type");
+        // 自增长
+        String extra = fieldResult.getString("extra");
+        // 注释
+        String comment = fieldResult.getString("comment");
+
+        if (type.indexOf("(") > 0) {
+          type = type.substring(0, type.indexOf("("));
+        }
+
+        // 数据库字段转java变量
+        String propertyName = processFiled(field, false);
+
+        FieldInfo fieldInfo = new FieldInfo();
+
+        fieldInfo.setFieldName(field);
+        fieldInfo.setComment(comment);
+        fieldInfo.setSqlType(type);
+        // 自增判断
+        fieldInfo.setAutoIncrement("auto_increment".equalsIgnoreCase(extra));
+        fieldInfo.setPropertyName(propertyName);
+        // 字段类型转换
+        fieldInfo.setJavaType(processJavaType(type));
+
+        // 写入
+        fieldInfoList.add(fieldInfo);
+
+        // 表信息补充
+        if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, type)) {
+          tableInfo.setHaveDateTime(true);
+        }
+        if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, type)) {
+          tableInfo.setHaveDate(true);
+        }
+        if (ArrayUtils.contains(Constants.SQL_DECIMAL_TYPES, type)) {
+          tableInfo.setHaveBigDecimal(true);
+        }
+      }
+    } catch (Exception e) {
+      logger.error("读取表失败：", e);
+    } finally {
+      if (fieldResult != null) {
+        try {
+          fieldResult.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+
+      if (preparedStatement != null) {
+        try {
+          preparedStatement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return fieldInfoList;
+  }
+
+  // java类型
+  private static String processJavaType(String type) {
+    if (ArrayUtils.contains(Constants.SQL_INTEGER_TYPES, type)) {
+      return "Integer";
+    } else if (ArrayUtils.contains(Constants.SQL_LONG_TYPES, type)) {
+      return "Long";
+    } else if (ArrayUtils.contains(Constants.SQL_STRING_TYPES, type)) {
+      return "String";
+    } else if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, type)
+        || ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, type)) {
+      return "Date";
+    } else if (ArrayUtils.contains(Constants.SQL_DECIMAL_TYPES, type)) {
+      return "BigDecimal";
+    } else {
+      throw new RuntimeException("数据库字段类型转换为JAVA类型时出错：" + type);
     }
   }
 }
