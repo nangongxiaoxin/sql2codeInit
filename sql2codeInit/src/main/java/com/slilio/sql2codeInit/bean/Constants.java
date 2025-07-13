@@ -12,11 +12,39 @@ public class Constants {
   // 参数bean后缀 操作对象生成对应方法的后缀
   public static String SUFFIX_BEAN_PARAM;
 
+  // 路径
+  public static String PATH_BASE;
+
+  // 包名
+  public static String PACKAGE_BASE;
+
+  public static String PATH_PO;
+
+  public static String PACKAGE_PO;
+
+  private static final String PATH_JAVA = "java";
+  private static final String PATH_RESOURCE = "resources";
+
   // 初始化
   static {
     IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
 
     SUFFIX_BEAN_PARAM = PropertiesUtils.getString("suffix.bean.param");
+
+    // path
+    PATH_BASE =
+        PropertiesUtils.getString("path.base")
+            + PATH_JAVA
+            + "/"
+            + PropertiesUtils.getString("package.base");
+    PATH_BASE = PATH_BASE.replace(".", "/");
+
+    // po
+    PATH_PO = PATH_BASE + "/" + PropertiesUtils.getString("package.po").replace(".", "/");
+
+    // package
+    PACKAGE_BASE = PropertiesUtils.getString("package.base");
+    PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
   }
 
   public static String[] SQL_DATE_TIME_TYPES = new String[] {"datetime", "timestamp"};
@@ -27,4 +55,8 @@ public class Constants {
   public static String[] SQL_INTEGER_TYPES =
       new String[] {"int", "tinyint", "smallint", "mediumint"};
   public static String[] SQL_LONG_TYPES = new String[] {"bigint"};
+
+  public static void main(String[] args) {
+    System.out.println(PATH_PO);
+  }
 }

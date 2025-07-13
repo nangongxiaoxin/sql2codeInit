@@ -18,7 +18,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <logback.version>1.2.10</logback.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <fastjson.version>2.0.32</fastjson.version>
+        <fastjson.version>2.0.53</fastjson.version>
     </properties>
 
     <dependencies>
@@ -54,8 +54,8 @@
 
         <!--        json转换-->
         <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
 

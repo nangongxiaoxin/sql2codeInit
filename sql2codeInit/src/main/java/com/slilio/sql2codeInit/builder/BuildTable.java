@@ -1,14 +1,16 @@
 package com.slilio.sql2codeInit.builder;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.slilio.sql2codeInit.bean.Constants;
 import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
+import com.slilio.sql2codeInit.utils.JsonUtils;
 import com.slilio.sql2codeInit.utils.PropertiesUtils;
 import com.slilio.sql2codeInit.utils.StringUtils;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +23,11 @@ public class BuildTable {
   private static Connection connection = null;
 
   // 获取表和注释
-  private static String SQL_SHOW_TABLE_STATUS = "SHOW TABLE STATUS";
+  private static final String SQL_SHOW_TABLE_STATUS = "SHOW TABLE STATUS";
   // 获取表字段
-  private static String SQL_SHOW_TABLE_FIELDS = "SHOW FULL FIELDS FROM %s";
+  private static final String SQL_SHOW_TABLE_FIELDS = "SHOW FULL FIELDS FROM %s";
+  // 获取表索引
+  private static final String SQL_SHOW_TABLE_INDEX = "SHOW INDEX FROM %s";
 
   // 初始化
   static {
@@ -40,7 +44,7 @@ public class BuildTable {
     }
   }
 
-  public static void getTables() {
+  public static List<TableInfo> getTables() {
     PreparedStatement preparedStatement = null;
     ResultSet tableResult = null;
     // 表信息
@@ -83,11 +87,15 @@ public class BuildTable {
             tableInfo.getBeanName(),
             tableInfo.getBeanParamName());
 
-        // 调取字段信息
-        List<FieldInfo> fieldInfoList = readFieldInfo(tableInfo);
+        // 1.调取字段信息并写入
+        readFieldInfo(tableInfo);
+        // 2.调取索引信息并写入
+        getKeyIndexInfo(tableInfo);
 
-        logger.info(JSONObject.toJSONString(fieldInfoList));
+        // 写入
+        tableInfoList.add(tableInfo);
       }
+      logger.info("表：{}", JsonUtils.convertObject2Json(tableInfoList));
     } catch (Exception e) {
       logger.error("读取表失败：", e);
     } finally {
@@ -115,24 +123,12 @@ public class BuildTable {
         }
       }
     }
-  }
 
-  //  驼峰转化
-  private static String processFiled(String field, Boolean upperCaseFirstLetter) {
-    StringBuffer sb = new StringBuffer();
-    String[] fields = field.split("_");
-
-    // 首字母
-    sb.append(upperCaseFirstLetter ? StringUtils.upperCaseFirstLetter(fields[0]) : fields[0]);
-    // 其他词
-    for (int i = 1; i < fields.length; i++) {
-      sb.append(StringUtils.upperCaseFirstLetter(fields[i]));
-    }
-    return sb.toString();
+    return tableInfoList;
   }
 
   // 表字段
-  private static List<FieldInfo> readFieldInfo(TableInfo tableInfo) {
+  private static void readFieldInfo(TableInfo tableInfo) {
     PreparedStatement preparedStatement = null;
     ResultSet fieldResult = null;
     // 表信息
@@ -178,14 +174,24 @@ public class BuildTable {
         // 表信息补充
         if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, type)) {
           tableInfo.setHaveDateTime(true);
+        } else {
+          tableInfo.setHaveDateTime(false);
         }
+
         if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, type)) {
           tableInfo.setHaveDate(true);
+        } else {
+          tableInfo.setHaveDate(false);
         }
+
         if (ArrayUtils.contains(Constants.SQL_DECIMAL_TYPES, type)) {
           tableInfo.setHaveBigDecimal(true);
+        } else {
+          tableInfo.setHaveBigDecimal(false);
         }
       }
+      // 写入
+      tableInfo.setFieldList(fieldInfoList);
     } catch (Exception e) {
       logger.error("读取表失败：", e);
     } finally {
@@ -205,7 +211,78 @@ public class BuildTable {
         }
       }
     }
-    return fieldInfoList;
+  }
+
+  // 表索引
+  private static void getKeyIndexInfo(TableInfo tableInfo) {
+    PreparedStatement preparedStatement = null;
+    ResultSet fieldResult = null;
+    // 表信息
+    List<FieldInfo> fieldInfoList = new ArrayList<>();
+    try {
+      // 构建Map字典方便后续查询和操作
+      Map<String, FieldInfo> tempMap = new HashMap<>();
+      for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+        tempMap.put(fieldInfo.getFieldName(), fieldInfo);
+      }
+
+      preparedStatement =
+          connection.prepareStatement(
+              String.format(SQL_SHOW_TABLE_INDEX, tableInfo.getTableName()));
+      fieldResult = preparedStatement.executeQuery();
+
+      // 遍历
+      while (fieldResult.next()) {
+        String keyName = fieldResult.getString("key_name");
+        Integer nonUnique = fieldResult.getInt("non_unique");
+        String columnName = fieldResult.getString("column_name");
+
+        if (nonUnique == 1) {
+          continue;
+        }
+
+        List<FieldInfo> keyFieldList = tableInfo.getKeyIndexMap().get(keyName);
+        if (keyFieldList == null) {
+          keyFieldList = new ArrayList<>();
+          tableInfo.getKeyIndexMap().put(keyName, keyFieldList);
+        }
+
+        // 查询临时map字典并写入到index list中
+        keyFieldList.add(tempMap.get(columnName));
+      }
+    } catch (Exception e) {
+      logger.error("读取索引失败：", e);
+    } finally {
+      if (fieldResult != null) {
+        try {
+          fieldResult.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+
+      if (preparedStatement != null) {
+        try {
+          preparedStatement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  //  驼峰转化
+  private static String processFiled(String field, Boolean upperCaseFirstLetter) {
+    StringBuffer sb = new StringBuffer();
+    String[] fields = field.split("_");
+
+    // 首字母
+    sb.append(upperCaseFirstLetter ? StringUtils.upperCaseFirstLetter(fields[0]) : fields[0]);
+    // 其他词
+    for (int i = 1; i < fields.length; i++) {
+      sb.append(StringUtils.upperCaseFirstLetter(fields[i]));
+    }
+    return sb.toString();
   }
 
   // java类型

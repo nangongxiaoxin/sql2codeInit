@@ -19,7 +19,7 @@ public class TableInfo {
   // 表注释
   private String comment;
   // 字段信息
-  private List<FieldInfo> fieldInfoList;
+  private List<FieldInfo> fieldList;
   // 扩展字段信息
   private List<FieldInfo> extendFieldInfoList;
   // 唯一索引集合
@@ -71,12 +71,12 @@ public class TableInfo {
     this.comment = comment;
   }
 
-  public List<FieldInfo> getFieldInfoList() {
-    return fieldInfoList;
+  public List<FieldInfo> getFieldList() {
+    return fieldList;
   }
 
-  public void setFieldInfoList(List<FieldInfo> fieldInfoList) {
-    this.fieldInfoList = fieldInfoList;
+  public void setFieldList(List<FieldInfo> fieldList) {
+    this.fieldList = fieldList;
   }
 
   public Map<String, List<FieldInfo>> getKeyIndexMap() {
