@@ -139,6 +139,10 @@ public class BuildTable {
               String.format(SQL_SHOW_TABLE_FIELDS, tableInfo.getTableName()));
       fieldResult = preparedStatement.executeQuery();
 
+      Boolean haveDateTime = false;
+      Boolean haveDate = false;
+      Boolean haveBigDecimal = false;
+
       // 遍历
       while (fieldResult.next()) {
         // 字段
@@ -173,24 +177,21 @@ public class BuildTable {
 
         // 表信息补充
         if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, type)) {
-          tableInfo.setHaveDateTime(true);
-        } else {
-          tableInfo.setHaveDateTime(false);
+          haveDateTime = true;
         }
 
         if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, type)) {
-          tableInfo.setHaveDate(true);
-        } else {
-          tableInfo.setHaveDate(false);
+          haveDate = true;
         }
 
         if (ArrayUtils.contains(Constants.SQL_DECIMAL_TYPES, type)) {
-          tableInfo.setHaveBigDecimal(true);
-        } else {
-          tableInfo.setHaveBigDecimal(false);
+          haveBigDecimal = true;
         }
       }
       // 写入
+      tableInfo.setHaveDateTime(haveDateTime);
+      tableInfo.setHaveDate(haveDate);
+      tableInfo.setHaveBigDecimal(haveBigDecimal);
       tableInfo.setFieldList(fieldInfoList);
     } catch (Exception e) {
       logger.error("读取表失败：", e);

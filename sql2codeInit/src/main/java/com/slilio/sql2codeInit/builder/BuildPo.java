@@ -1,6 +1,7 @@
 package com.slilio.sql2codeInit.builder;
 
 import com.slilio.sql2codeInit.bean.Constants;
+import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -36,12 +37,34 @@ public class BuildPo {
       bw.newLine();
       bw.newLine();
 
+      // package
       bw.write("import java.io.Serializable;");
       bw.newLine();
+
+      // 导包
+      if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
+        bw.write("import java.util.Date;");
+        bw.newLine();
+      }
+      if (tableInfo.getHaveBigDecimal()) {
+        bw.write("import java.math.BigDecimal;");
+        bw.newLine();
+      }
+
       bw.newLine();
 
+      // 类注释
+      BuildComment.createClassComment(bw, tableInfo.getComment());
+      // 类
       bw.write("public class " + tableInfo.getBeanName() + " implements Serializable {");
       bw.newLine();
+
+      for (FieldInfo field : tableInfo.getFieldList()) {
+        bw.write("\tprivate " + field.getJavaType() + " " + field.getPropertyName() + ";");
+        bw.newLine();
+        bw.newLine();
+      }
+
       bw.write("}");
 
       bw.flush();

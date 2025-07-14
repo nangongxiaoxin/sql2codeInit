@@ -87,7 +87,7 @@ public class TableInfo {
     this.keyIndexMap = keyIndexMap;
   }
 
-  public boolean isHaveDate() {
+  public boolean getHaveDate() {
     return haveDate;
   }
 
@@ -95,7 +95,7 @@ public class TableInfo {
     this.haveDate = haveDate;
   }
 
-  public boolean isHaveDateTime() {
+  public boolean getHaveDateTime() {
     return haveDateTime;
   }
 
@@ -103,7 +103,7 @@ public class TableInfo {
     this.haveDateTime = haveDateTime;
   }
 
-  public boolean isHaveBigDecimal() {
+  public boolean getHaveBigDecimal() {
     return haveBigDecimal;
   }
 
