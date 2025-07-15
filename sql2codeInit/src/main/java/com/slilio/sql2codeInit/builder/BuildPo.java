@@ -3,8 +3,10 @@ package com.slilio.sql2codeInit.builder;
 import com.slilio.sql2codeInit.bean.Constants;
 import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
+import com.slilio.sql2codeInit.utils.DateUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,10 @@ public class BuildPo {
       if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
         bw.write("import java.util.Date;");
         bw.newLine();
+        bw.write(Constants.BEAN_DATE_FORMAT_CLASS + ";");
+        bw.newLine();
+        bw.write(Constants.BEAN_DATE_UNFORMAT_CLASS + ";");
+        bw.newLine();
       }
       if (tableInfo.getHaveBigDecimal()) {
         bw.write("import java.math.BigDecimal;");
@@ -60,6 +66,40 @@ public class BuildPo {
       bw.newLine();
 
       for (FieldInfo field : tableInfo.getFieldList()) {
+        // 变量注释
+        BuildComment.createFieldComment(bw, field.getComment());
+
+        // time
+        if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, field.getSqlType())) {
+          // 序列化
+          bw.write(
+              "\t"
+                  + String.format(
+                      Constants.BEAN_DATE_FORMAT_SERIALIZE, DateUtils.YYYY_MM_DD_HH_MM_SS));
+          bw.newLine();
+
+          // 反序列化
+          bw.write(
+              "\t"
+                  + String.format(
+                      Constants.BEAN_DATE_UNFORMAT_SERIALIZE, DateUtils.YYYY_MM_DD_HH_MM_SS));
+          bw.newLine();
+        }
+
+        // date
+        if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, field.getSqlType())) {
+          // 序列化
+          bw.write(
+              "\t" + String.format(Constants.BEAN_DATE_FORMAT_SERIALIZE, DateUtils.YYYY_MM_DD));
+          bw.newLine();
+
+          // 反序列化
+          bw.write(
+              "\t" + String.format(Constants.BEAN_DATE_UNFORMAT_SERIALIZE, DateUtils.YYYY_MM_DD));
+          bw.newLine();
+        }
+
+        // 变量
         bw.write("\tprivate " + field.getJavaType() + " " + field.getPropertyName() + ";");
         bw.newLine();
         bw.newLine();

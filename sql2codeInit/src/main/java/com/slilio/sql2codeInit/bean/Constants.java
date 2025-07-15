@@ -22,6 +22,22 @@ public class Constants {
 
   public static String PACKAGE_PO;
 
+  // 注释
+  public static String AUTHOR_COMMENT;
+
+  // 需要忽略的属性
+  public static String IGNORE_BEAN_TO_JSON_FILED;
+  public static String IGNORE_BEAN_TO_JSON_EXPRESSION;
+  public static String IGNORE_BEAN_TO_JSON_CLASS;
+
+  // 日期序列化
+  public static String BEAN_DATE_FORMAT_SERIALIZE;
+  public static String BEAN_DATE_FORMAT_CLASS;
+
+  // 日期反序列化
+  public static String BEAN_DATE_UNFORMAT_SERIALIZE;
+  public static String BEAN_DATE_UNFORMAT_CLASS;
+
   private static final String PATH_JAVA = "java";
   private static final String PATH_RESOURCE = "resources";
 
@@ -31,20 +47,33 @@ public class Constants {
 
     SUFFIX_BEAN_PARAM = PropertiesUtils.getString("suffix.bean.param");
 
+    // package
+    PACKAGE_BASE = PropertiesUtils.getString("package.base");
+    // PO
+    PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
+
     // path
-    PATH_BASE =
-        PropertiesUtils.getString("path.base")
-            + PATH_JAVA
-            + "/"
-            + PropertiesUtils.getString("package.base");
+    PATH_BASE = PropertiesUtils.getString("path.base") + PATH_JAVA;
     PATH_BASE = PATH_BASE.replace(".", "/");
 
     // po
-    PATH_PO = PATH_BASE + "/" + PropertiesUtils.getString("package.po").replace(".", "/");
+    PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
 
-    // package
-    PACKAGE_BASE = PropertiesUtils.getString("package.base");
-    PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
+    // 注释
+    AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");
+
+    // 需要忽略的属性
+    IGNORE_BEAN_TO_JSON_FILED = PropertiesUtils.getString("ignore.bean.toJson.field");
+    IGNORE_BEAN_TO_JSON_EXPRESSION = PropertiesUtils.getString("ignore.bean.toJson.expression");
+    IGNORE_BEAN_TO_JSON_CLASS = PropertiesUtils.getString("ignore.bean.toJson.class");
+
+    // 日期序列化
+    BEAN_DATE_FORMAT_SERIALIZE = PropertiesUtils.getString("bean.date.format.serialize");
+    BEAN_DATE_FORMAT_CLASS = PropertiesUtils.getString("bean.date.format.class");
+
+    // 日期反序列化
+    BEAN_DATE_UNFORMAT_SERIALIZE = PropertiesUtils.getString("bean.date.unformat.serialize");
+    BEAN_DATE_UNFORMAT_CLASS = PropertiesUtils.getString("bean.date.unformat.class");
   }
 
   public static String[] SQL_DATE_TIME_TYPES = new String[] {"datetime", "timestamp"};

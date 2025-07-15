@@ -2,6 +2,7 @@ package com.slilio.sql2codeInit.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -23,7 +24,7 @@ public class PropertiesUtils {
     try {
       //            读取
       is = PropertiesUtils.class.getClassLoader().getResourceAsStream("application.properties");
-      props.load(is);
+      props.load(new InputStreamReader(is, "UTF-8"));
 
       Iterator<Object> iterator = props.keySet().iterator();
       while (iterator.hasNext()) {
