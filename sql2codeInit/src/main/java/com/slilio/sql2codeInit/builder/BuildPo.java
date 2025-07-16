@@ -116,7 +116,8 @@ public class BuildPo {
         // JsonIgnore
         if (ArrayUtils.contains(
             Constants.IGNORE_BEAN_TO_JSON_FILED.split(","), field.getPropertyName())) {
-          bw.write("\t" + String.format(Constants.IGNORE_BEAN_TO_JSON_EXPRESSION));
+          bw.write("\t" + Constants.IGNORE_BEAN_TO_JSON_EXPRESSION);
+          bw.newLine();
         }
 
         // 变量

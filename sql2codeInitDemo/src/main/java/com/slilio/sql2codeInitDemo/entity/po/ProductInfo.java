@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @Description: 产品信息
  *
  * @Author: slilio
- * @CreateTime: 2025-07-16
+ * @CreateTime: 2025-07-17
  */
 public class ProductInfo implements Serializable {
 	/**
@@ -22,7 +22,8 @@ public class ProductInfo implements Serializable {
 	/**
 	 * 厂商ID
 	 */
-	@JsonIgnore	private String companyId;
+	@JsonIgnore
+	private String companyId;
 
 	/**
 	 * 编码
@@ -71,6 +72,7 @@ public class ProductInfo implements Serializable {
 	/**
 	 * 状态
 	 */
-	@JsonIgnore	private Integer status;
+	@JsonIgnore
+	private Integer status;
 
 }
