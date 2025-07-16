@@ -4,6 +4,7 @@ import com.slilio.sql2codeInit.bean.Constants;
 import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
 import com.slilio.sql2codeInit.utils.DateUtils;
+import com.slilio.sql2codeInit.utils.StringUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang3.ArrayUtils;
@@ -126,8 +127,37 @@ public class BuildPo {
         bw.newLine();
       }
 
-      bw.write("}");
+      // 变量set、get方法
+      for (FieldInfo field : tableInfo.getFieldList()) {
+        String tempField = StringUtils.upperCaseFirstLetter(field.getPropertyName());
+        // set
+        bw.write(
+            "\tpublic void set"
+                + tempField
+                + " ("
+                + field.getJavaType()
+                + " "
+                + field.getPropertyName()
+                + ") {");
+        bw.newLine();
+        bw.write("\t\tthis." + field.getPropertyName() + " = " + field.getPropertyName() + ";");
+        bw.newLine();
+        bw.write("\t}");
+        bw.newLine();
+        bw.newLine();
 
+        // get
+        bw.write("\tpublic " + field.getJavaType() + " get" + tempField + " () {");
+        bw.newLine();
+        bw.write("\t\treturn this." + field.getPropertyName() + ";");
+        bw.newLine();
+        bw.write("\t}");
+        bw.newLine();
+        bw.newLine();
+      }
+
+      // 文件结束
+      bw.write("}");
       bw.flush();
     } catch (Exception e) {
       logger.error("创建PO失败", e);

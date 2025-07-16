@@ -75,4 +75,105 @@ public class ProductInfo implements Serializable {
 	@JsonIgnore
 	private Integer status;
 
+	/**
+	 * 0：删除；1：正常
+	 */
+	private Integer isDel;
+
+	public void setId (Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId () {
+		return this.id;
+	}
+
+	public void setCompanyId (String companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getCompanyId () {
+		return this.companyId;
+	}
+
+	public void setCode (String code) {
+		this.code = code;
+	}
+
+	public String getCode () {
+		return this.code;
+	}
+
+	public void setProductName (String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductName () {
+		return this.productName;
+	}
+
+	public void setPrice (BigDecimal price) {
+		this.price = price;
+	}
+
+	public BigDecimal getPrice () {
+		return this.price;
+	}
+
+	public void setSkuType (Integer skuType) {
+		this.skuType = skuType;
+	}
+
+	public Integer getSkuType () {
+		return this.skuType;
+	}
+
+	public void setColorType (Integer colorType) {
+		this.colorType = colorType;
+	}
+
+	public Integer getColorType () {
+		return this.colorType;
+	}
+
+	public void setCreateTime (Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getCreateTime () {
+		return this.createTime;
+	}
+
+	public void setCreateDate (Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getCreateDate () {
+		return this.createDate;
+	}
+
+	public void setStock (Long stock) {
+		this.stock = stock;
+	}
+
+	public Long getStock () {
+		return this.stock;
+	}
+
+	public void setStatus (Integer status) {
+		this.status = status;
+	}
+
+	public Integer getStatus () {
+		return this.status;
+	}
+
+	public void setIsDel (Integer isDel) {
+		this.isDel = isDel;
+	}
+
+	public Integer getIsDel () {
+		return this.isDel;
+	}
+
 }
