@@ -5,12 +5,13 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @Description: 产品信息
  *
  * @Author: slilio
- * @CreateTime: 2025-07-15
+ * @CreateTime: 2025-07-16
  */
 public class ProductInfo implements Serializable {
 	/**
@@ -21,7 +22,7 @@ public class ProductInfo implements Serializable {
 	/**
 	 * 厂商ID
 	 */
-	private String companyId;
+	@JsonIgnore	private String companyId;
 
 	/**
 	 * 编码
@@ -70,6 +71,6 @@ public class ProductInfo implements Serializable {
 	/**
 	 * 状态
 	 */
-	private Integer status;
+	@JsonIgnore	private Integer status;
 
 }

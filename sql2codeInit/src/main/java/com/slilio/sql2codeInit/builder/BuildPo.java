@@ -57,6 +57,20 @@ public class BuildPo {
         bw.newLine();
       }
 
+      // JsonIgnore
+      Boolean haveIgnoreBean = false;
+      for (FieldInfo field : tableInfo.getFieldList()) {
+        if (ArrayUtils.contains(
+            Constants.IGNORE_BEAN_TO_JSON_FILED.split(","), field.getPropertyName())) {
+          haveIgnoreBean = true;
+          break;
+        }
+      }
+      if (haveIgnoreBean) {
+        bw.write(Constants.IGNORE_BEAN_TO_JSON_CLASS + ";");
+        bw.newLine();
+      }
+
       bw.newLine();
 
       // 类注释
@@ -97,6 +111,12 @@ public class BuildPo {
           bw.write(
               "\t" + String.format(Constants.BEAN_DATE_UNFORMAT_SERIALIZE, DateUtils.YYYY_MM_DD));
           bw.newLine();
+        }
+
+        // JsonIgnore
+        if (ArrayUtils.contains(
+            Constants.IGNORE_BEAN_TO_JSON_FILED.split(","), field.getPropertyName())) {
+          bw.write("\t" + String.format(Constants.IGNORE_BEAN_TO_JSON_EXPRESSION));
         }
 
         // 变量
