@@ -156,7 +156,35 @@ public class BuildPo {
         bw.newLine();
       }
 
+      // 重写toString方法
+      StringBuffer toStringBf = new StringBuffer();
+      Integer index = 0;
+      for (FieldInfo field : tableInfo.getFieldList()) {
+        index++;
+        toStringBf.append(
+            field.getComment()
+                + ": \" + ( "
+                + field.getPropertyName()
+                + " == null ? \"空\" : "
+                + field.getPropertyName()
+                + " )");
+        if (index < tableInfo.getFieldList().size()) {
+          toStringBf.append(" + ").append(" \", ");
+        }
+      }
+      String toStringBfStr = toStringBf.toString();
+      toStringBfStr = " \" " + toStringBfStr;
+
+      bw.write("\t@Override");
+      bw.newLine();
+      bw.write("\tpublic String toString() {");
+      bw.newLine();
+      bw.write("\t\treturn " + toStringBfStr + ";");
+      bw.newLine();
+      bw.write("\t}");
+
       // 文件结束
+      bw.newLine();
       bw.write("}");
       bw.flush();
     } catch (Exception e) {
