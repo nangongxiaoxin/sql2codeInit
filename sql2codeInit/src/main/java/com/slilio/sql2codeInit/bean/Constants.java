@@ -12,15 +12,20 @@ public class Constants {
   // 参数bean后缀 操作对象生成对应方法的后缀
   public static String SUFFIX_BEAN_PARAM;
 
-  // 路径
-  public static String PATH_BASE;
-
   // 包名
   public static String PACKAGE_BASE;
 
-  public static String PATH_PO;
-
   public static String PACKAGE_PO;
+
+  public static String PACKAGE_UTILS;
+
+  public static String PACKAGE_ENUMS;
+
+  // 路径
+  public static String PATH_BASE;
+  public static String PATH_PO;
+  public static String PATH_UTILS;
+  public static String PATH_ENUMS;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -49,15 +54,22 @@ public class Constants {
 
     // package
     PACKAGE_BASE = PropertiesUtils.getString("package.base");
-    // PO
-    PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
 
     // path
     PATH_BASE = PropertiesUtils.getString("path.base") + PATH_JAVA;
     PATH_BASE = PATH_BASE.replace(".", "/");
 
     // po
+    PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
     PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
+
+    // utils
+    PACKAGE_UTILS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.utils");
+    PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
+
+    // enums
+    PACKAGE_ENUMS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.enums");
+    PATH_ENUMS = PATH_BASE + "/" + PACKAGE_ENUMS.replace(".", "/");
 
     // 注释
     AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");

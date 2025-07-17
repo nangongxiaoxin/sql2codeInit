@@ -36,11 +36,11 @@ public class BuildPo {
 
       // 文件内容正文
 
+      // package
       bw.write("package " + Constants.PACKAGE_PO + ";");
       bw.newLine();
       bw.newLine();
 
-      // package
       bw.write("import java.io.Serializable;");
       bw.newLine();
 
@@ -51,6 +51,11 @@ public class BuildPo {
         bw.write(Constants.BEAN_DATE_FORMAT_CLASS + ";");
         bw.newLine();
         bw.write(Constants.BEAN_DATE_UNFORMAT_CLASS + ";");
+        bw.newLine();
+
+        bw.write("import " + Constants.PACKAGE_UTILS + ".DateUtils;");
+        bw.newLine();
+        bw.write("import " + Constants.PACKAGE_ENUMS + ".DateTimePatternEnum;");
         bw.newLine();
       }
       if (tableInfo.getHaveBigDecimal()) {
@@ -161,12 +166,24 @@ public class BuildPo {
       Integer index = 0;
       for (FieldInfo field : tableInfo.getFieldList()) {
         index++;
+
+        String properName = field.getPropertyName();
+        if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, field.getSqlType())) {
+          properName =
+              "DateUtils.format("
+                  + properName
+                  + ", DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())";
+        } else if (ArrayUtils.contains(Constants.SQL_DATE_TYPES, field.getSqlType())) {
+          properName =
+              "DateUtils.format(" + properName + ", DateTimePatternEnum.YYYY_MM_DD.getPattern())";
+        }
+
         toStringBf.append(
             field.getComment()
                 + ": \" + ( "
                 + field.getPropertyName()
                 + " == null ? \"空\" : "
-                + field.getPropertyName()
+                + properName
                 + " )");
         if (index < tableInfo.getFieldList().size()) {
           toStringBf.append(" + ").append(" \", ");

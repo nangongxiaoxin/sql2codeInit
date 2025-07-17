@@ -2,13 +2,15 @@ package com.slilio.sql2codeInitDemo.entity.po;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.slilio.sql2codeInitDemo.enums.DateTimePatternEnum;
+import com.slilio.sql2codeInitDemo.utils.DateUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 产品信息 @Author: slilio @CreateTime: 2025-07-17
+ * @Description: 产品信息 @Author: slilio @CreateTime: 2025-07-18
  */
 public class ProductInfo implements Serializable {
   /** 自增ID */
@@ -164,9 +166,13 @@ public class ProductInfo implements Serializable {
         + ", 颜色: "
         + (colorType == null ? "空" : colorType)
         + ", 创建时间: "
-        + (createTime == null ? "空" : createTime)
+        + (createTime == null
+            ? "空"
+            : DateUtils.format(createTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern()))
         + ", 创建日期: "
-        + (createDate == null ? "空" : createDate)
+        + (createDate == null
+            ? "空"
+            : DateUtils.format(createDate, DateTimePatternEnum.YYYY_MM_DD.getPattern()))
         + ", 库存: "
         + (stock == null ? "空" : stock)
         + ", 状态: "
@@ -175,8 +181,10 @@ public class ProductInfo implements Serializable {
         + (isDel == null ? "空" : isDel);
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] a) {
     ProductInfo productInfo = new ProductInfo();
-    System.out.println(productInfo.toString());
+    productInfo.setCreateDate(new Date());
+    productInfo.setCreateTime(new Date());
+    System.out.println(productInfo);
   }
 }

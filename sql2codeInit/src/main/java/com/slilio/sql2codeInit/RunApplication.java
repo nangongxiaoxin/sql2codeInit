@@ -1,6 +1,7 @@
 package com.slilio.sql2codeInit;
 
 import com.slilio.sql2codeInit.bean.TableInfo;
+import com.slilio.sql2codeInit.builder.BuildBase;
 import com.slilio.sql2codeInit.builder.BuildPo;
 import com.slilio.sql2codeInit.builder.BuildTable;
 import java.util.List;
@@ -10,13 +11,14 @@ import java.util.List;
  */
 public class RunApplication {
   public static void main(String[] args) {
-    List<TableInfo> tableInfoList = BuildTable.getTables();
-
-    //    System.out.println(JSON.toJSONString(tableInfoList));
 
     // 1.遍历生成文件
+    List<TableInfo> tableInfoList = BuildTable.getTables();
     for (TableInfo tableInfo : tableInfoList) {
       BuildPo.execute(tableInfo);
     }
+
+    // 2.
+    BuildBase.execute();
   }
 }
