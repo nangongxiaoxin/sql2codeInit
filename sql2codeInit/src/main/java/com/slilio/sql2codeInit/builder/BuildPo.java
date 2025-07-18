@@ -126,7 +126,7 @@ public class BuildPo {
           bw.newLine();
         }
 
-        // 变量
+        // 变量（参数）
         bw.write("\tprivate " + field.getJavaType() + " " + field.getPropertyName() + ";");
         bw.newLine();
         bw.newLine();

@@ -9,8 +9,15 @@ public class Constants {
   // 是否忽略表前缀
   public static Boolean IGNORE_TABLE_PREFIX;
 
+  // 模糊搜索配置
+  public static String SUFFIX_BEAN_QUERY_FUZZY;
+
+  // 日期起始
+  public static String SUFFIX_BEAN_QUERY_TIME_START;
+  public static String SUFFIX_BEAN_QUERY_TIME_END;
+
   // 参数bean后缀 操作对象生成对应方法的后缀
-  public static String SUFFIX_BEAN_PARAM;
+  public static String SUFFIX_BEAN_QUERY;
 
   // 包名
   public static String PACKAGE_BASE;
@@ -21,11 +28,14 @@ public class Constants {
 
   public static String PACKAGE_ENUMS;
 
+  public static String PACKAGE_QUERY;
+
   // 路径
   public static String PATH_BASE;
   public static String PATH_PO;
   public static String PATH_UTILS;
   public static String PATH_ENUMS;
+  public static String PATH_QUERY;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -50,7 +60,7 @@ public class Constants {
   static {
     IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
 
-    SUFFIX_BEAN_PARAM = PropertiesUtils.getString("suffix.bean.param");
+    SUFFIX_BEAN_QUERY = PropertiesUtils.getString("suffix.bean.query");
 
     // package
     PACKAGE_BASE = PropertiesUtils.getString("package.base");
@@ -63,6 +73,10 @@ public class Constants {
     PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
     PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
 
+    // query
+    PACKAGE_QUERY = PACKAGE_BASE + "." + PropertiesUtils.getString("package.query");
+    PATH_QUERY = PATH_BASE + "/" + PACKAGE_QUERY.replace(".", "/");
+
     // utils
     PACKAGE_UTILS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.utils");
     PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
@@ -73,6 +87,13 @@ public class Constants {
 
     // 注释
     AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");
+
+    // 模糊搜索配置
+    SUFFIX_BEAN_QUERY_FUZZY = PropertiesUtils.getString("suffix.bean.query.fuzzy");
+
+    // 日期起始
+    SUFFIX_BEAN_QUERY_TIME_START = PropertiesUtils.getString("suffix.bean.query.time.start");
+    SUFFIX_BEAN_QUERY_TIME_END = PropertiesUtils.getString("suffix.bean.query.time.end");
 
     // 需要忽略的属性
     IGNORE_BEAN_TO_JSON_FILED = PropertiesUtils.getString("ignore.bean.toJson.field");

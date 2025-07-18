@@ -3,6 +3,7 @@ package com.slilio.sql2codeInit;
 import com.slilio.sql2codeInit.bean.TableInfo;
 import com.slilio.sql2codeInit.builder.BuildBase;
 import com.slilio.sql2codeInit.builder.BuildPo;
+import com.slilio.sql2codeInit.builder.BuildQuery;
 import com.slilio.sql2codeInit.builder.BuildTable;
 import java.util.List;
 
@@ -15,10 +16,14 @@ public class RunApplication {
     // 1.遍历生成文件
     List<TableInfo> tableInfoList = BuildTable.getTables();
     for (TableInfo tableInfo : tableInfoList) {
+      // 实体类
       BuildPo.execute(tableInfo);
+
+      // 查询类
+      BuildQuery.execute(tableInfo);
     }
 
-    // 2.
+    // 2.生成基础类
     BuildBase.execute();
   }
 }
