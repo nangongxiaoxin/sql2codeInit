@@ -1,10 +1,7 @@
 package com.slilio.sql2codeInit;
 
 import com.slilio.sql2codeInit.bean.TableInfo;
-import com.slilio.sql2codeInit.builder.BuildBase;
-import com.slilio.sql2codeInit.builder.BuildPo;
-import com.slilio.sql2codeInit.builder.BuildQuery;
-import com.slilio.sql2codeInit.builder.BuildTable;
+import com.slilio.sql2codeInit.builder.*;
 import java.util.List;
 
 /**
@@ -21,6 +18,9 @@ public class RunApplication {
 
       // 查询类
       BuildQuery.execute(tableInfo);
+
+      // Mapper
+      BuildMapper.execute(tableInfo);
     }
 
     // 2.生成基础类

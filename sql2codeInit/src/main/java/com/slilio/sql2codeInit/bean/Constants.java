@@ -19,16 +19,16 @@ public class Constants {
   // 参数bean后缀 操作对象生成对应方法的后缀
   public static String SUFFIX_BEAN_QUERY;
 
+  // mapper文件后缀
+  public static String SUFFIX_MAPPERS;
+
   // 包名
   public static String PACKAGE_BASE;
-
   public static String PACKAGE_PO;
-
   public static String PACKAGE_UTILS;
-
   public static String PACKAGE_ENUMS;
-
   public static String PACKAGE_QUERY;
+  public static String PACKAGE_MAPPERS;
 
   // 路径
   public static String PATH_BASE;
@@ -36,6 +36,7 @@ public class Constants {
   public static String PATH_UTILS;
   public static String PATH_ENUMS;
   public static String PATH_QUERY;
+  public static String PATH_MAPPERS;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -60,7 +61,11 @@ public class Constants {
   static {
     IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
 
+    // 参数bean后缀 操作对象生成对应方法的后缀
     SUFFIX_BEAN_QUERY = PropertiesUtils.getString("suffix.bean.query");
+
+    // Mapper后缀配置
+    SUFFIX_MAPPERS = PropertiesUtils.getString("suffix.mappers");
 
     // package
     PACKAGE_BASE = PropertiesUtils.getString("package.base");
@@ -84,6 +89,10 @@ public class Constants {
     // enums
     PACKAGE_ENUMS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.enums");
     PATH_ENUMS = PATH_BASE + "/" + PACKAGE_ENUMS.replace(".", "/");
+
+    // mapper
+    PACKAGE_MAPPERS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.mappers");
+    PATH_MAPPERS = PATH_BASE + "/" + PACKAGE_MAPPERS.replace(".", "/");
 
     // 注释
     AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");

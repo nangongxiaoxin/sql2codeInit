@@ -33,6 +33,13 @@ public class BuildComment {
     bw.newLine();
   }
 
+  /**
+   * 参数注释
+   *
+   * @param bw
+   * @param fieldComment
+   * @throws Exception
+   */
   public static void createFieldComment(BufferedWriter bw, String fieldComment) throws Exception {
     bw.write("\t/**");
     bw.newLine();
@@ -42,5 +49,23 @@ public class BuildComment {
     bw.newLine();
   }
 
+  /**
+   * mapper接口方法注释
+   *
+   * @param bw
+   * @param fieldComment
+   * @throws Exception
+   */
+  public static void createMapperMethodComment(BufferedWriter bw, String fieldComment)
+      throws Exception {
+    bw.write("\t/**");
+    bw.newLine();
+    bw.write("\t * " + (fieldComment == null ? "" : fieldComment));
+    bw.newLine();
+    bw.write("\t */");
+    bw.newLine();
+  }
+
+  /** 方法注释 */
   public static void createMethodComment() {}
 }

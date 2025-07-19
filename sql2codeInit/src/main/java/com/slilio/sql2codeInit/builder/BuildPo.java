@@ -41,10 +41,10 @@ public class BuildPo {
       bw.newLine();
       bw.newLine();
 
+      // 导包
       bw.write("import java.io.Serializable;");
       bw.newLine();
 
-      // 导包
       if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
         bw.write("import java.util.Date;");
         bw.newLine();
