@@ -21,6 +21,9 @@ public class RunApplication {
 
       // Mapper
       BuildMapper.execute(tableInfo);
+
+      // Mapper XML
+      BuildMapperXml.execute(tableInfo);
     }
 
     // 2.生成基础类

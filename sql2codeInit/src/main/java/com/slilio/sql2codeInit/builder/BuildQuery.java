@@ -116,34 +116,9 @@ public class BuildQuery {
 
       // 变量set、get方法
       List<FieldInfo> fieldInfoList = tableInfo.getFieldList();
-      fieldInfoList.addAll(extendList);
-      for (FieldInfo field : fieldInfoList) {
-        String tempField = StringUtils.upperCaseFirstLetter(field.getPropertyName());
-        // set
-        bw.write(
-            "\tpublic void set"
-                + tempField
-                + " ("
-                + field.getJavaType()
-                + " "
-                + field.getPropertyName()
-                + ") {");
-        bw.newLine();
-        bw.write("\t\tthis." + field.getPropertyName() + " = " + field.getPropertyName() + ";");
-        bw.newLine();
-        bw.write("\t}");
-        bw.newLine();
-        bw.newLine();
 
-        // get
-        bw.write("\tpublic " + field.getJavaType() + " get" + tempField + " () {");
-        bw.newLine();
-        bw.write("\t\treturn this." + field.getPropertyName() + ";");
-        bw.newLine();
-        bw.write("\t}");
-        bw.newLine();
-        bw.newLine();
-      }
+      buildGetSet(bw, fieldInfoList);
+      buildGetSet(bw, extendList);
 
       // 文件结束
       bw.newLine();
@@ -173,6 +148,37 @@ public class BuildQuery {
           e.printStackTrace();
         }
       }
+    }
+  }
+
+  private static void buildGetSet(BufferedWriter bw, List<FieldInfo> fieldInfoList)
+      throws Exception {
+    for (FieldInfo field : fieldInfoList) {
+      String tempField = StringUtils.upperCaseFirstLetter(field.getPropertyName());
+      // set
+      bw.write(
+          "\tpublic void set"
+              + tempField
+              + " ("
+              + field.getJavaType()
+              + " "
+              + field.getPropertyName()
+              + ") {");
+      bw.newLine();
+      bw.write("\t\tthis." + field.getPropertyName() + " = " + field.getPropertyName() + ";");
+      bw.newLine();
+      bw.write("\t}");
+      bw.newLine();
+      bw.newLine();
+
+      // get
+      bw.write("\tpublic " + field.getJavaType() + " get" + tempField + " () {");
+      bw.newLine();
+      bw.write("\t\treturn this." + field.getPropertyName() + ";");
+      bw.newLine();
+      bw.write("\t}");
+      bw.newLine();
+      bw.newLine();
     }
   }
 }

@@ -37,6 +37,7 @@ public class Constants {
   public static String PATH_ENUMS;
   public static String PATH_QUERY;
   public static String PATH_MAPPERS;
+  public static String PATH_MAPPERS_XMLS;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -94,6 +95,13 @@ public class Constants {
     PACKAGE_MAPPERS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.mappers");
     PATH_MAPPERS = PATH_BASE + "/" + PACKAGE_MAPPERS.replace(".", "/");
 
+    // mapper xml
+    PATH_MAPPERS_XMLS =
+        PropertiesUtils.getString("path.base")
+            + PATH_RESOURCE
+            + "/"
+            + PACKAGE_MAPPERS.replace(".", "/");
+
     // 注释
     AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");
 
@@ -128,6 +136,6 @@ public class Constants {
   public static String[] SQL_LONG_TYPES = new String[] {"bigint"};
 
   public static void main(String[] args) {
-    System.out.println(PATH_PO);
+    System.out.println(PATH_MAPPERS_XMLS);
   }
 }
