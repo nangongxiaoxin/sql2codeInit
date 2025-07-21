@@ -21,7 +21,7 @@ public class TableInfo {
   // 字段信息
   private List<FieldInfo> fieldList;
   // 扩展字段信息
-  private List<FieldInfo> extendFieldInfoList;
+  private List<FieldInfo> fieldExtendList;
   // 唯一索引集合
   private Map<String, List<FieldInfo>> keyIndexMap = new LinkedHashMap<>();
   // 是否有date类型
@@ -31,12 +31,12 @@ public class TableInfo {
   // 是否有bigDecimal类型
   private boolean haveBigDecimal;
 
-  public List<FieldInfo> getExtendFieldInfoList() {
-    return extendFieldInfoList;
+  public List<FieldInfo> getFieldExtendList() {
+    return fieldExtendList;
   }
 
-  public void setExtendFieldInfoList(List<FieldInfo> extendFieldInfoList) {
-    this.extendFieldInfoList = extendFieldInfoList;
+  public void setFieldExtendList(List<FieldInfo> fieldExtendList) {
+    this.fieldExtendList = fieldExtendList;
   }
 
   public String getTableName() {

@@ -6,7 +6,6 @@ import com.slilio.sql2codeInit.bean.TableInfo;
 import com.slilio.sql2codeInit.utils.StringUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -61,7 +60,6 @@ public class BuildQuery {
       bw.write("public class " + classname + " {");
       bw.newLine();
 
-      List<FieldInfo> extendList = new ArrayList();
       for (FieldInfo field : tableInfo.getFieldList()) {
         // 变量注释
         BuildComment.createFieldComment(bw, field.getComment());
@@ -71,20 +69,15 @@ public class BuildQuery {
         bw.newLine();
         bw.newLine();
 
-        // String类型的参数
+        // String类型扩展属性
         if (ArrayUtils.contains(Constants.SQL_STRING_TYPES, field.getSqlType())) {
           String propertyNameFuzzy = field.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_FUZZY;
           bw.write("\tprivate " + field.getJavaType() + " " + propertyNameFuzzy + ";");
           bw.newLine();
           bw.newLine();
-
-          FieldInfo fuzzyField = new FieldInfo();
-          fuzzyField.setJavaType(field.getJavaType());
-          fuzzyField.setPropertyName(propertyNameFuzzy);
-          extendList.add(fuzzyField);
         }
 
-        // 日期类型
+        // 日期类型扩展属性
         if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, field.getSqlType())
             || ArrayUtils.contains(Constants.SQL_DATE_TYPES, field.getSqlType())) {
           // 开始
@@ -94,31 +87,17 @@ public class BuildQuery {
           bw.newLine();
           bw.newLine();
 
-          FieldInfo timeStartField = new FieldInfo();
-          timeStartField.setJavaType("String");
-          timeStartField.setPropertyName(propertyNameStart);
-
           // 结束
           String propertyNameEnd = field.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_END;
           bw.write("\tprivate String " + propertyNameEnd + ";");
           bw.newLine();
           bw.newLine();
-
-          FieldInfo timeEndField = new FieldInfo();
-          timeEndField.setJavaType("String");
-          timeEndField.setPropertyName(propertyNameEnd);
-
-          // 上述字段添加到列表
-          extendList.add(timeStartField);
-          extendList.add(timeEndField);
         }
       }
 
       // 变量set、get方法
-      List<FieldInfo> fieldInfoList = tableInfo.getFieldList();
-
-      buildGetSet(bw, fieldInfoList);
-      buildGetSet(bw, extendList);
+      buildGetSet(bw, tableInfo.getFieldList());
+      buildGetSet(bw, tableInfo.getFieldExtendList());
 
       // 文件结束
       bw.newLine();

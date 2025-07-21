@@ -3,7 +3,6 @@ package com.slilio.sql2codeInit.builder;
 import com.slilio.sql2codeInit.bean.Constants;
 import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
-import com.slilio.sql2codeInit.utils.JsonUtils;
 import com.slilio.sql2codeInit.utils.PropertiesUtils;
 import com.slilio.sql2codeInit.utils.StringUtils;
 import java.sql.*;
@@ -95,7 +94,8 @@ public class BuildTable {
         // 写入
         tableInfoList.add(tableInfo);
       }
-      logger.info("表：{}", JsonUtils.convertObject2Json(tableInfoList));
+      // todo 异常
+      //      logger.info("表：{}", JsonUtils.convertObject2Json(tableInfoList));
     } catch (Exception e) {
       logger.error("读取表失败：", e);
     } finally {
@@ -133,6 +133,10 @@ public class BuildTable {
     ResultSet fieldResult = null;
     // 表信息
     List<FieldInfo> fieldInfoList = new ArrayList<>();
+
+    // 表扩展信息
+    List<FieldInfo> fieldExtendList = new ArrayList<>();
+
     try {
       preparedStatement =
           connection.prepareStatement(
@@ -187,12 +191,43 @@ public class BuildTable {
         if (ArrayUtils.contains(Constants.SQL_DECIMAL_TYPES, type)) {
           haveBigDecimal = true;
         }
+
+        // String类型扩展属性
+        if (ArrayUtils.contains(Constants.SQL_STRING_TYPES, type)) {
+          FieldInfo fuzzyField = new FieldInfo();
+          fuzzyField.setJavaType(fieldInfo.getJavaType());
+          fuzzyField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_FUZZY);
+          fuzzyField.setFieldName(fieldInfo.getFieldName());
+          fieldExtendList.add(fuzzyField);
+        }
+
+        // 日期类型扩展属性
+        if (ArrayUtils.contains(Constants.SQL_DATE_TIME_TYPES, type)
+            || ArrayUtils.contains(Constants.SQL_DATE_TYPES, type)) {
+          // 开始
+          FieldInfo timeStartField = new FieldInfo();
+          timeStartField.setJavaType("String");
+          timeStartField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_TIME_START);
+          timeStartField.setFieldName(fieldInfo.getFieldName());
+          // 上述字段添加到列表
+          fieldExtendList.add(timeStartField);
+
+          // 结束
+          FieldInfo timeEndField = new FieldInfo();
+          timeEndField.setJavaType("String");
+          timeEndField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_TIME_END);
+          timeEndField.setFieldName(fieldInfo.getFieldName());
+          // 上述字段添加到列表
+          fieldExtendList.add(timeEndField);
+        }
       }
       // 写入
       tableInfo.setHaveDateTime(haveDateTime);
       tableInfo.setHaveDate(haveDate);
       tableInfo.setHaveBigDecimal(haveBigDecimal);
+      tableInfo.setFieldExtendList(fieldExtendList);
       tableInfo.setFieldList(fieldInfoList);
+      // 增加扩展
     } catch (Exception e) {
       logger.error("读取表失败：", e);
     } finally {
