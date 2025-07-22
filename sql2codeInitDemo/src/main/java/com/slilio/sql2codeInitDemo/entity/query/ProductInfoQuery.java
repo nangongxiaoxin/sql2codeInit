@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * @Description: 产品信息查询
  *
  * @Author: slilio
- * @CreateTime: 2025-07-22
+ * @CreateTime: 2025-07-23
  */
 public class ProductInfoQuery {
 	/**

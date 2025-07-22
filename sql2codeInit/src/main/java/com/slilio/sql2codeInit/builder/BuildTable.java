@@ -198,6 +198,7 @@ public class BuildTable {
           fuzzyField.setJavaType(fieldInfo.getJavaType());
           fuzzyField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_FUZZY);
           fuzzyField.setFieldName(fieldInfo.getFieldName());
+          fuzzyField.setSqlType(type);
           fieldExtendList.add(fuzzyField);
         }
 
@@ -209,6 +210,7 @@ public class BuildTable {
           timeStartField.setJavaType("String");
           timeStartField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_TIME_START);
           timeStartField.setFieldName(fieldInfo.getFieldName());
+          timeStartField.setSqlType(type);
           // 上述字段添加到列表
           fieldExtendList.add(timeStartField);
 
@@ -217,6 +219,7 @@ public class BuildTable {
           timeEndField.setJavaType("String");
           timeEndField.setPropertyName(propertyName + Constants.SUFFIX_BEAN_QUERY_TIME_END);
           timeEndField.setFieldName(fieldInfo.getFieldName());
+          timeEndField.setSqlType(type);
           // 上述字段添加到列表
           fieldExtendList.add(timeEndField);
         }
