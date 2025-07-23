@@ -24,6 +24,8 @@ public class BuildMapperXml {
 
   private static final String QUERY_CONDITION = "query_condition";
 
+  private static final String BASE_QUERY_CONDITION_EXTEND = "base_query_condition_extend";
+
   public static void execute(TableInfo tableInfo) {
     File folder = new File(Constants.PATH_MAPPERS_XMLS);
     if (!folder.exists()) {
@@ -70,7 +72,13 @@ public class BuildMapperXml {
       bw.newLine();
 
       // 4. xml 扩展查询条件
-      buildConditionQueryXml(bw, QUERY_CONDITION, tableInfo);
+      buildConditionQueryXml(bw, BASE_QUERY_CONDITION_EXTEND, tableInfo);
+      bw.newLine();
+      bw.newLine();
+
+      // 5. xml 通用查询调价
+      buildBaseQueryCondition(
+          bw, QUERY_CONDITION, BASE_QUERY_CONDITION, BASE_QUERY_CONDITION_EXTEND, tableInfo);
       bw.newLine();
       bw.newLine();
 
@@ -106,6 +114,36 @@ public class BuildMapperXml {
   }
 
   /**
+   * 通用查询条件
+   *
+   * @param bw
+   * @param baseQueryConditionExtend
+   * @param baseQueryCondition
+   * @param tableInfo
+   */
+  private static void buildBaseQueryCondition(
+      BufferedWriter bw,
+      String queryCondition,
+      String baseQueryCondition,
+      String baseQueryConditionExtend,
+      TableInfo tableInfo)
+      throws Exception {
+    bw.write("\t<!-- 扩展查询条件 -->");
+    bw.newLine();
+    bw.write("\t<sql id=\"" + queryCondition + "\">");
+    bw.newLine();
+    bw.write("\t\t<where>");
+    bw.newLine();
+    bw.write("\t\t\t<include refid=\"" + baseQueryCondition + "\"/>");
+    bw.newLine();
+    bw.write("\t\t\t<include refid=\"" + baseQueryConditionExtend + "\"/>");
+    bw.newLine();
+    bw.write("\t\t</where>");
+    bw.newLine();
+    bw.write("\t</sql>");
+  }
+
+  /**
    * xml 基础查询条件
    *
    * @param bw
@@ -138,16 +176,18 @@ public class BuildMapperXml {
   }
 
   /**
+   * xml 扩展查询条件
+   *
    * @param bw
-   * @param query_condition
+   * @param base_query_condition_extend
    * @param tableInfo
    * @throws Exception
    */
   private static void buildConditionQueryXml(
-      BufferedWriter bw, String query_condition, TableInfo tableInfo) throws Exception {
+      BufferedWriter bw, String base_query_condition_extend, TableInfo tableInfo) throws Exception {
     bw.write("\t<!-- 扩展查询条件 -->");
     bw.newLine();
-    bw.write("\t<sql id=\"" + query_condition + "\">");
+    bw.write("\t<sql id=\"" + base_query_condition_extend + "\">");
     bw.newLine();
 
     for (FieldInfo fieldInfo : tableInfo.getFieldExtendList()) {
