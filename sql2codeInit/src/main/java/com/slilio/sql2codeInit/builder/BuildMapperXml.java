@@ -82,6 +82,23 @@ public class BuildMapperXml {
       bw.newLine();
       bw.newLine();
 
+      // 通用查询条件
+      bw.newLine();
+      bw.write("\t<!-- 查询列表 -->");
+      bw.newLine();
+      bw.write("\t<select id=\"selectList\" resultMap=\"base_result_map\">");
+      bw.newLine();
+      bw.write(
+          "\t\tselect <include refid=\""
+              + BASE_COLUMN_LIST
+              + "\"/> from "
+              + tableInfo.getTableName()
+              + " <include refid=\""
+              + QUERY_CONDITION
+              + "\"/>");
+      bw.newLine();
+      bw.write("\t</select>");
+
       // 文件写入结束
       bw.newLine();
       bw.write("</mapper>");
