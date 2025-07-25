@@ -1,6 +1,5 @@
 package com.slilio.sql2codeInitDemo.mappers;
 
-
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,7 +17,7 @@ public interface BaseMapper<T, P> {
   Integer insertOrUpdateBatch(@Param("list") List<T> list);
 
   /** selectList：根据参数查询集合 */
-  List<T> select(@Param("query") P p);
+  List<T> selectList(@Param("query") P p);
 
   /** selectCount */
   Integer selectCount(@Param("query") P p);

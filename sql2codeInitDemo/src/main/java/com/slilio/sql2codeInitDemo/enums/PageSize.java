@@ -1,8 +1,5 @@
-package com.slilio.sql2codeInitDemo.entity.query;
+package com.slilio.sql2codeInitDemo.enums;
 
-/**
- * @Author: slilio @CreateTime: 2025-07-24 @Description: @Version: 1.0
- */
 public enum PageSize {
   SIZE15(15),
   SIZE20(20),

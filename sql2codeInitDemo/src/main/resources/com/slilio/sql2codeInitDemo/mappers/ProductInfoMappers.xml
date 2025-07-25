@@ -112,5 +112,15 @@
 	<!-- 查询列表 -->
 	<select id="selectList" resultMap="base_result_map">
 		select <include refid="base_column_list"/> from tb_product_info <include refid="query_condition"/>
+		<if test="query.orderBy!=null">order by ${query.orderBy}</if>
+		<if test="query.simplePage!=null">limit #{query.simplePage.start},#{query.simplePage.end}</if>
 	</select>
+
+
+	<!-- 查询数量 -->
+	<select id="selectCount" resultMap="java.lang.Long">
+		select count(1) from tb_product_info <include refid="query_condition"/>
+	</select>
+
+
 </mapper>

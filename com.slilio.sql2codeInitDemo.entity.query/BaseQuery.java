@@ -1,4 +1,7 @@
-public class BaseQuery {
+package com.slilio.sql2codeInitDemo.entity.query;
+
+
+public class BaseParam {
   private SimplePage simplePage;
   private Integer pageNo;
   private Integer pageSize;

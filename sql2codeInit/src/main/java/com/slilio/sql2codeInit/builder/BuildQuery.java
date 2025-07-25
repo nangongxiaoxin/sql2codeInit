@@ -57,7 +57,7 @@ public class BuildQuery {
       bw.newLine();
       BuildComment.createClassComment(bw, tableInfo.getComment() + "查询");
       // 类
-      bw.write("public class " + classname + " {");
+      bw.write("public class " + classname + " extends BaseQuery{");
       bw.newLine();
 
       for (FieldInfo field : tableInfo.getFieldList()) {

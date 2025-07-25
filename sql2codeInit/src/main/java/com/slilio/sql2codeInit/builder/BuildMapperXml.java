@@ -62,42 +62,35 @@ public class BuildMapperXml {
       bw.newLine();
 
       // 2. xml 通用查询列
-      buildBaseColumnXml(bw, BASE_COLUMN_LIST, tableInfo);
+      buildBaseColumnXml(bw, tableInfo, BASE_COLUMN_LIST);
       bw.newLine();
       bw.newLine();
 
       // 3. xml 基础查询条件
-      buildBaseQueryXml(bw, BASE_QUERY_CONDITION, tableInfo);
+      buildBaseQueryXml(bw, tableInfo, BASE_QUERY_CONDITION);
       bw.newLine();
       bw.newLine();
 
       // 4. xml 扩展查询条件
-      buildConditionQueryXml(bw, BASE_QUERY_CONDITION_EXTEND, tableInfo);
+      buildConditionQueryXml(bw, tableInfo, BASE_QUERY_CONDITION_EXTEND);
       bw.newLine();
       bw.newLine();
 
       // 5. xml 通用查询调价
       buildBaseQueryCondition(
-          bw, QUERY_CONDITION, BASE_QUERY_CONDITION, BASE_QUERY_CONDITION_EXTEND, tableInfo);
+          bw, tableInfo, QUERY_CONDITION, BASE_QUERY_CONDITION, BASE_QUERY_CONDITION_EXTEND);
       bw.newLine();
       bw.newLine();
 
-      // 通用查询条件
+      // 查询列表
+      buildQueryList(bw, tableInfo, BASE_COLUMN_LIST, QUERY_CONDITION);
       bw.newLine();
-      bw.write("\t<!-- 查询列表 -->");
       bw.newLine();
-      bw.write("\t<select id=\"selectList\" resultMap=\"base_result_map\">");
+
+      // 查询数量
+      buildQueryCount(bw, tableInfo, QUERY_CONDITION);
       bw.newLine();
-      bw.write(
-          "\t\tselect <include refid=\""
-              + BASE_COLUMN_LIST
-              + "\"/> from "
-              + tableInfo.getTableName()
-              + " <include refid=\""
-              + QUERY_CONDITION
-              + "\"/>");
       bw.newLine();
-      bw.write("\t</select>");
 
       // 文件写入结束
       bw.newLine();
@@ -131,6 +124,65 @@ public class BuildMapperXml {
   }
 
   /**
+   * 查询数量
+   *
+   * @param tableInfo
+   * @param bw
+   * @param query_condition
+   * @throws IOException
+   */
+  private static void buildQueryCount(
+      BufferedWriter bw, TableInfo tableInfo, String query_condition) throws IOException {
+    bw.newLine();
+    bw.write("\t<!-- 查询数量 -->");
+    bw.newLine();
+    bw.write("\t<select id=\"selectCount\" resultMap=\"java.lang.Long\">");
+    bw.newLine();
+    bw.write(
+        "\t\tselect count(1) from "
+            + tableInfo.getTableName()
+            + " <include refid=\""
+            + query_condition
+            + "\"/>");
+    bw.newLine();
+    bw.write("\t</select>");
+  }
+
+  /**
+   * 查询列表
+   *
+   * @param tableInfo
+   * @param bw
+   * @param base_column_list
+   * @param query_condition
+   * @throws Exception
+   */
+  private static void buildQueryList(
+      BufferedWriter bw, TableInfo tableInfo, String base_column_list, String query_condition)
+      throws Exception {
+    bw.newLine();
+    bw.write("\t<!-- 查询列表 -->");
+    bw.newLine();
+    bw.write("\t<select id=\"selectList\" resultMap=\"base_result_map\">");
+    bw.newLine();
+    bw.write(
+        "\t\tselect <include refid=\""
+            + base_column_list
+            + "\"/> from "
+            + tableInfo.getTableName()
+            + " <include refid=\""
+            + query_condition
+            + "\"/>");
+    bw.newLine();
+    bw.write("\t\t<if test=\"query.orderBy!=null\">order by ${query.orderBy}</if>");
+    bw.newLine();
+    bw.write(
+        "\t\t<if test=\"query.simplePage!=null\">limit #{query.simplePage.start},#{query.simplePage.end}</if>");
+    bw.newLine();
+    bw.write("\t</select>");
+  }
+
+  /**
    * 通用查询条件
    *
    * @param bw
@@ -140,10 +192,10 @@ public class BuildMapperXml {
    */
   private static void buildBaseQueryCondition(
       BufferedWriter bw,
+      TableInfo tableInfo,
       String queryCondition,
       String baseQueryCondition,
-      String baseQueryConditionExtend,
-      TableInfo tableInfo)
+      String baseQueryConditionExtend)
       throws Exception {
     bw.write("\t<!-- 扩展查询条件 -->");
     bw.newLine();
@@ -168,7 +220,7 @@ public class BuildMapperXml {
    * @param tableInfo
    */
   private static void buildBaseQueryXml(
-      BufferedWriter bw, String baseQueryCondition, TableInfo tableInfo) throws Exception {
+      BufferedWriter bw, TableInfo tableInfo, String baseQueryCondition) throws Exception {
     bw.write("\t<!-- 通用查询列 -->");
     bw.newLine();
     bw.write("\t<sql id=\"" + baseQueryCondition + "\">");
@@ -201,7 +253,7 @@ public class BuildMapperXml {
    * @throws Exception
    */
   private static void buildConditionQueryXml(
-      BufferedWriter bw, String base_query_condition_extend, TableInfo tableInfo) throws Exception {
+      BufferedWriter bw, TableInfo tableInfo, String base_query_condition_extend) throws Exception {
     bw.write("\t<!-- 扩展查询条件 -->");
     bw.newLine();
     bw.write("\t<sql id=\"" + base_query_condition_extend + "\">");
@@ -259,7 +311,7 @@ public class BuildMapperXml {
    * @param tableInfo
    */
   private static void buildBaseColumnXml(
-      BufferedWriter bw, String base_column_list, TableInfo tableInfo) throws Exception {
+      BufferedWriter bw, TableInfo tableInfo, String base_column_list) throws Exception {
     bw.write("\t<!-- 通用查询列 -->");
     bw.newLine();
     bw.write("\t<sql id=\"" + base_column_list + "\">");

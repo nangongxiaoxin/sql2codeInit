@@ -1,6 +1,5 @@
 package com.slilio.sql2codeInitDemo.utils;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
