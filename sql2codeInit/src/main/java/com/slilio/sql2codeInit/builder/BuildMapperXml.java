@@ -136,7 +136,7 @@ public class BuildMapperXml {
     bw.newLine();
     bw.write("\t<!-- 查询数量 -->");
     bw.newLine();
-    bw.write("\t<select id=\"selectCount\" resultMap=\"java.lang.Long\">");
+    bw.write("\t<select id=\"selectCount\" resultType=\"java.lang.Long\">");
     bw.newLine();
     bw.write(
         "\t\tselect count(1) from "
@@ -338,7 +338,7 @@ public class BuildMapperXml {
     bw.write("\t<!-- 实体映射 -->");
     bw.newLine();
     String poClass = Constants.PACKAGE_PO + "." + tableInfo.getBeanName();
-    bw.write("\t<resultMap id=\"BaseResultMap\" type=\"" + poClass + "\">");
+    bw.write("\t<resultMap id=\"base_result_map\" type=\"" + poClass + "\">");
     bw.newLine();
 
     FieldInfo idField = null;
