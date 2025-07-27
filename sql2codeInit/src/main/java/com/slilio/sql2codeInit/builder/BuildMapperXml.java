@@ -275,9 +275,9 @@ public class BuildMapperXml {
           andWhere =
               "<![CDATA[ and "
                   + fieldInfo.getFieldName()
-                  + " >= str_to_date(#{"
+                  + " >= str_to_date(#{query."
                   + fieldInfo.getPropertyName()
-                  + "}, '%Y-%m-%d') }]]>";
+                  + "}, '%Y-%m-%d') ]]>";
         } else if (fieldInfo.getPropertyName().endsWith(Constants.SUFFIX_BEAN_QUERY_TIME_END)) {
           andWhere =
               "<![CDATA[ and "

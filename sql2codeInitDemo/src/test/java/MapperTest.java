@@ -2,6 +2,7 @@ import com.slilio.sql2codeInitDemo.RunDemoApplication;
 import com.slilio.sql2codeInitDemo.entity.po.ProductInfo;
 import com.slilio.sql2codeInitDemo.entity.query.ProductInfoQuery;
 import com.slilio.sql2codeInitDemo.mappers.ProductInfoMappers;
+import java.text.ParseException;
 import java.util.List;
 import javax.annotation.Resource;
 import org.junit.Test;
@@ -18,11 +19,20 @@ public class MapperTest {
   @Resource private ProductInfoMappers<ProductInfo, ProductInfoQuery> productInfoMapper;
 
   @Test
-  public void mapTest() {
-    List<ProductInfo> dataList = productInfoMapper.selectList(new ProductInfoQuery());
+  public void mapTest() throws ParseException {
+    ProductInfoQuery query = new ProductInfoQuery();
+
+    query.setId(5);
+    query.setCreateTimeStart("2017-05-04");
+    query.setCodeFuzzy("I");
+
+    List<ProductInfo> dataList = productInfoMapper.selectList(query);
     System.out.println(dataList.size());
     for (ProductInfo productInfo : dataList) {
       System.out.println(productInfo);
     }
+
+    Long count = productInfoMapper.selectCount(query);
+    System.out.println(count);
   }
 }

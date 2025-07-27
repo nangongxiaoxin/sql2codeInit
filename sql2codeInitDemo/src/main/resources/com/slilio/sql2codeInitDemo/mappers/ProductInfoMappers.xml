@@ -87,13 +87,13 @@
 			and product_name like concat ('%', #{query.productNameFuzzy}, '%')
 		</if>
 		<if test="query.createTimeStart != null and query.createTimeStart !=''">
-			<![CDATA[ and create_time >= str_to_date(#{createTimeStart}, '%Y-%m-%d') }]]>
+			<![CDATA[ and create_time >= str_to_date(#{query.createTimeStart}, '%Y-%m-%d') ]]>
 		</if>
 		<if test="query.createTimeEnd != null and query.createTimeEnd !=''">
 			<![CDATA[ and create_time < date_sub(str_to_date(#{query.createTimeEnd}, '%Y-%m-%d'),interval -1 day) ]]>
 		</if>
 		<if test="query.createDateStart != null and query.createDateStart !=''">
-			<![CDATA[ and create_date >= str_to_date(#{createDateStart}, '%Y-%m-%d') }]]>
+			<![CDATA[ and create_date >= str_to_date(#{query.createDateStart}, '%Y-%m-%d') ]]>
 		</if>
 		<if test="query.createDateEnd != null and query.createDateEnd !=''">
 			<![CDATA[ and create_date < date_sub(str_to_date(#{query.createDateEnd}, '%Y-%m-%d'),interval -1 day) ]]>
