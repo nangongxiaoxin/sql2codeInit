@@ -104,7 +104,14 @@ public class BuildMapperXml {
       bw.newLine();
 
       // 10. xml 批量插入
-      buildBatchInsert(bw, tableInfo);
+      StringBuffer insertFieldBuffer = new StringBuffer();
+      StringBuffer insertPropertyBuffer = new StringBuffer();
+      buildBatchInsert(bw, tableInfo, insertFieldBuffer, insertPropertyBuffer);
+      bw.newLine();
+      bw.newLine();
+
+      // 10. xml 批量插入或更新(有匹配的值)
+      buildBatchInsertOrUpdate(bw, tableInfo, insertFieldBuffer, insertPropertyBuffer);
       bw.newLine();
       bw.newLine();
 
@@ -140,12 +147,17 @@ public class BuildMapperXml {
   }
 
   /**
-   * 批量插入
+   * 批量插入或更新(有匹配的值)
    *
    * @param bw
    * @param tableInfo
    */
-  private static void buildBatchInsert(BufferedWriter bw, TableInfo tableInfo) throws Exception {
+  private static void buildBatchInsertOrUpdate(
+      BufferedWriter bw,
+      TableInfo tableInfo,
+      StringBuffer insertFieldBuffer,
+      StringBuffer insertPropertyBuffer)
+      throws Exception {
     bw.newLine();
     bw.write("\t<!-- 批量插入 -->");
     bw.newLine();
@@ -156,12 +168,59 @@ public class BuildMapperXml {
             + tableInfo.getBeanName()
             + "\">");
     bw.newLine();
-    StringBuffer insertFieldBuffer = new StringBuffer();
+    String insertFieldBufferStr =
+        insertFieldBuffer.substring(0, insertFieldBuffer.lastIndexOf(","));
+    bw.write(
+        "\t\tinsert into " + tableInfo.getTableName() + "(" + insertFieldBufferStr + ")values");
+    bw.newLine();
+    bw.write(
+        "\t\t<foreach collection=\"list\" item=\"item\" separator=\",\"  open=\"(\" close=\")\">");
+    bw.newLine();
+    String insertPropertyBufferStr =
+        insertPropertyBuffer.substring(0, insertPropertyBuffer.lastIndexOf(","));
+    bw.write("\t\t\t" + insertPropertyBufferStr);
+    bw.newLine();
+    bw.write("\t\t</foreach>");
+    bw.newLine();
+    bw.write("\t\ton DUPLICATE KEY UPDATE");
+    // todo for(FieldInfo fieldInfo)
+    bw.newLine();
+    bw.write("\t</insert>");
+  }
+
+  /**
+   * 批量插入
+   *
+   * @param bw
+   * @param tableInfo
+   */
+  private static void buildBatchInsert(
+      BufferedWriter bw,
+      TableInfo tableInfo,
+      StringBuffer insertFieldBuffer,
+      StringBuffer insertPropertyBuffer)
+      throws Exception {
+    bw.newLine();
+    bw.write("\t<!-- 批量插入 -->");
+    bw.newLine();
+    bw.write(
+        "\t<insert id=\"insertBatch\" parameterType=\""
+            + Constants.PACKAGE_PO
+            + "."
+            + tableInfo.getBeanName()
+            + "\">");
+    bw.newLine();
+
     for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
       if (fieldInfo.getAutoIncrement()) {
         continue;
       }
       insertFieldBuffer.append(fieldInfo.getFieldName()).append(",");
+      insertPropertyBuffer
+          .append("#{item.")
+          .append(fieldInfo.getPropertyName())
+          .append("}")
+          .append(",");
     }
     String insertFieldBufferStr =
         insertFieldBuffer.substring(0, insertFieldBuffer.lastIndexOf(","));
@@ -171,17 +230,6 @@ public class BuildMapperXml {
     bw.write(
         "\t\t<foreach collection=\"list\" item=\"item\" separator=\",\"  open=\"(\" close=\")\">");
     bw.newLine();
-    StringBuffer insertPropertyBuffer = new StringBuffer();
-    for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
-      if (fieldInfo.getAutoIncrement()) {
-        continue;
-      }
-      insertPropertyBuffer
-          .append("#{item.")
-          .append(fieldInfo.getPropertyName())
-          .append("}")
-          .append(",");
-    }
     String insertPropertyBufferStr =
         insertPropertyBuffer.substring(0, insertPropertyBuffer.lastIndexOf(","));
     bw.write("\t\t\t" + insertPropertyBufferStr);
