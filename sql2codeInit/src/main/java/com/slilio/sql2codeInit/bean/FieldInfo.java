@@ -12,7 +12,7 @@ public class FieldInfo {
   // 字段备注
   private String comment;
   // 字段是否自增长
-  private Boolean isAutoIncrement;
+  private Boolean autoIncrement;
 
   public String getFieldName() {
     return fieldName;
@@ -54,11 +54,11 @@ public class FieldInfo {
     this.comment = comment;
   }
 
-  public boolean isAutoIncrement() {
-    return isAutoIncrement;
+  public Boolean getAutoIncrement() {
+    return autoIncrement;
   }
 
-  public void setAutoIncrement(boolean autoIncrement) {
-    isAutoIncrement = autoIncrement;
+  public void setAutoIncrement(Boolean autoIncrement) {
+    this.autoIncrement = autoIncrement;
   }
 }

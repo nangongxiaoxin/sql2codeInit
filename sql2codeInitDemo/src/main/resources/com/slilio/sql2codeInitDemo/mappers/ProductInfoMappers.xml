@@ -123,4 +123,207 @@
 	</select>
 
 
+	<!-- 插入（匹配有值的字段） -->
+	<insert id="insert" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
+		<selectKey keyProperty="bean.id" resultType="Integer" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+		insert into tb_product_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null">
+				id,
+			</if>
+			<if test="bean.companyId != null">
+				company_id,
+			</if>
+			<if test="bean.code != null">
+				code,
+			</if>
+			<if test="bean.productName != null">
+				product_name,
+			</if>
+			<if test="bean.price != null">
+				price,
+			</if>
+			<if test="bean.skuType != null">
+				sku_type,
+			</if>
+			<if test="bean.colorType != null">
+				color_type,
+			</if>
+			<if test="bean.createTime != null">
+				create_time,
+			</if>
+			<if test="bean.createDate != null">
+				create_date,
+			</if>
+			<if test="bean.stock != null">
+				stock,
+			</if>
+			<if test="bean.status != null">
+				status,
+			</if>
+			<if test="bean.isDel != null">
+				is_del,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null">
+				#{bean.id},
+			</if>
+			<if test="bean.companyId != null">
+				#{bean.companyId},
+			</if>
+			<if test="bean.code != null">
+				#{bean.code},
+			</if>
+			<if test="bean.productName != null">
+				#{bean.productName},
+			</if>
+			<if test="bean.price != null">
+				#{bean.price},
+			</if>
+			<if test="bean.skuType != null">
+				#{bean.skuType},
+			</if>
+			<if test="bean.colorType != null">
+				#{bean.colorType},
+			</if>
+			<if test="bean.createTime != null">
+				#{bean.createTime},
+			</if>
+			<if test="bean.createDate != null">
+				#{bean.createDate},
+			</if>
+			<if test="bean.stock != null">
+				#{bean.stock},
+			</if>
+			<if test="bean.status != null">
+				#{bean.status},
+			</if>
+			<if test="bean.isDel != null">
+				#{bean.isDel},
+			</if>
+		</trim>
+	</insert>
+
+
+	<!-- 插入或者更新(有匹配的值) -->
+	<insert id="insertOrUpdate" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
+		insert into tb_product_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null">
+				id,
+			</if>
+			<if test="bean.companyId != null">
+				company_id,
+			</if>
+			<if test="bean.code != null">
+				code,
+			</if>
+			<if test="bean.productName != null">
+				product_name,
+			</if>
+			<if test="bean.price != null">
+				price,
+			</if>
+			<if test="bean.skuType != null">
+				sku_type,
+			</if>
+			<if test="bean.colorType != null">
+				color_type,
+			</if>
+			<if test="bean.createTime != null">
+				create_time,
+			</if>
+			<if test="bean.createDate != null">
+				create_date,
+			</if>
+			<if test="bean.stock != null">
+				stock,
+			</if>
+			<if test="bean.status != null">
+				status,
+			</if>
+			<if test="bean.isDel != null">
+				is_del,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null">
+				#{bean.id},
+			</if>
+			<if test="bean.companyId != null">
+				#{bean.companyId},
+			</if>
+			<if test="bean.code != null">
+				#{bean.code},
+			</if>
+			<if test="bean.productName != null">
+				#{bean.productName},
+			</if>
+			<if test="bean.price != null">
+				#{bean.price},
+			</if>
+			<if test="bean.skuType != null">
+				#{bean.skuType},
+			</if>
+			<if test="bean.colorType != null">
+				#{bean.colorType},
+			</if>
+			<if test="bean.createTime != null">
+				#{bean.createTime},
+			</if>
+			<if test="bean.createDate != null">
+				#{bean.createDate},
+			</if>
+			<if test="bean.stock != null">
+				#{bean.stock},
+			</if>
+			<if test="bean.status != null">
+				#{bean.status},
+			</if>
+			<if test="bean.isDel != null">
+				#{bean.isDel},
+			</if>
+		</trim>
+		on DUPLICATE KEY UPDATE
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.companyId != null">
+				company_id = values(company_id),
+			</if>
+			<if test="bean.productName != null">
+				product_name = values(product_name),
+			</if>
+			<if test="bean.price != null">
+				price = values(price),
+			</if>
+			<if test="bean.createTime != null">
+				create_time = values(create_time),
+			</if>
+			<if test="bean.createDate != null">
+				create_date = values(create_date),
+			</if>
+			<if test="bean.stock != null">
+				stock = values(stock),
+			</if>
+			<if test="bean.status != null">
+				status = values(status),
+			</if>
+			<if test="bean.isDel != null">
+				is_del = values(is_del),
+			</if>
+		</trim>
+	</insert>
+
+
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
+		insert into tb_product_info(company_id,code,product_name,price,sku_type,color_type,create_time,create_date,stock,status,is_del)values
+		<foreach collection="list" item="item" separator=","  open="(" close=")">
+			#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel}
+		</foreach>
+	</insert>
+
+
 </mapper>

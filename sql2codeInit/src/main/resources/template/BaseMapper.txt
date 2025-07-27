@@ -9,7 +9,7 @@ public interface BaseMapper<T, P> {
   Long insertOrUpdate(@Param("bean") T t);
 
   /** insertBatch：批量插入 */
-  Long updateBatch(@Param("list") List<T> list);
+  Long insertBatch(@Param("list") List<T> list);
 
   /** insertOrUpdateBatch：批量插入或更新 */
   Long insertOrUpdateBatch(@Param("list") List<T> list);
