@@ -3,6 +3,7 @@ package com.slilio.sql2codeInit.builder;
 import com.slilio.sql2codeInit.bean.Constants;
 import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
+import com.slilio.sql2codeInit.utils.StringUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -115,6 +116,11 @@ public class BuildMapperXml {
       bw.newLine();
       bw.newLine();
 
+      // 11. xml 根据主键更新
+      buildUpdateOfKey(bw, tableInfo);
+      bw.newLine();
+      bw.newLine();
+
       // 文件写入结束
       bw.newLine();
       bw.write("</mapper>");
@@ -147,6 +153,67 @@ public class BuildMapperXml {
   }
 
   /**
+   * 根据主键更新
+   *
+   * @param bw
+   * @param tableInfo
+   */
+  private static void buildUpdateOfKey(BufferedWriter bw, TableInfo tableInfo) throws Exception {
+    Map<String, List<FieldInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+    for (Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {
+      List<FieldInfo> keyFieldInfoList = entry.getValue();
+
+      Integer index = 0;
+      StringBuilder methodName = new StringBuilder();
+      StringBuilder paramNames = new StringBuilder();
+      for (FieldInfo fieldInfo : keyFieldInfoList) {
+        index++;
+        methodName.append(StringUtils.upperCaseFirstLetter(fieldInfo.getPropertyName()));
+        paramNames.append(fieldInfo.getFieldName() + "=#{" + fieldInfo.getPropertyName() + "}");
+        if (index < keyFieldInfoList.size()) {
+          methodName.append("And");
+          paramNames.append(" and ");
+        }
+      }
+      // 查询
+      bw.newLine();
+      bw.write("\t<!-- 根据 " + methodName + " 查询 -->");
+      bw.newLine();
+      bw.write("\t<select id=\"selectBy" + methodName + "\" resultMap=\"base_result_map\">");
+      bw.newLine();
+      bw.write(
+          "\t\tselect <include refid=\""
+              + BASE_COLUMN_LIST
+              + "\"/> from "
+              + tableInfo.getTableName()
+              + " where "
+              + paramNames);
+      bw.newLine();
+      bw.write("\t</select>");
+      bw.newLine();
+
+      //      // 更新
+      //      BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 更新");
+      //      bw.write(
+      //          "\tInteger updateBy" + methodName + " (@Param(\"bean\") T t, " + methodParams +
+      // ");");
+      //      bw.newLine();
+      //      bw.newLine();
+
+      // 删除
+      bw.newLine();
+      bw.write("\t<!-- 根据 " + methodName + " 删除 -->");
+      bw.newLine();
+      bw.write("\t<delete id=\"deleteBy" + methodName + "\">");
+      bw.newLine();
+      bw.write("\t\tdelete from " + tableInfo.getTableName() + " where " + paramNames);
+      bw.newLine();
+      bw.write("\t</delete>");
+      bw.newLine();
+    }
+  }
+
+  /**
    * 批量插入或更新(有匹配的值)
    *
    * @param bw
@@ -159,10 +226,10 @@ public class BuildMapperXml {
       StringBuffer insertPropertyBuffer)
       throws Exception {
     bw.newLine();
-    bw.write("\t<!-- 批量插入 -->");
+    bw.write("\t<!-- 批量插入或更新 -->");
     bw.newLine();
     bw.write(
-        "\t<insert id=\"insertBatch\" parameterType=\""
+        "\t<insert id=\"insertOrUpdateBatch\" parameterType=\""
             + Constants.PACKAGE_PO
             + "."
             + tableInfo.getBeanName()
@@ -182,9 +249,18 @@ public class BuildMapperXml {
     bw.newLine();
     bw.write("\t\t</foreach>");
     bw.newLine();
-    bw.write("\t\ton DUPLICATE KEY UPDATE");
-    // todo for(FieldInfo fieldInfo)
+    bw.write("\t\ton DUPLICATE KEY UPDATE ");
+
+    StringBuffer insertBatchUpdateBuffer = new StringBuffer();
+    for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+      insertBatchUpdateBuffer.append(
+          fieldInfo.getFieldName() + " = values(" + fieldInfo.getFieldName() + "),");
+    }
+    String insertBatchUpdateBufferStr =
+        insertBatchUpdateBuffer.substring(0, insertBatchUpdateBuffer.lastIndexOf(","));
+    bw.write(insertBatchUpdateBufferStr);
     bw.newLine();
+
     bw.write("\t</insert>");
   }
 

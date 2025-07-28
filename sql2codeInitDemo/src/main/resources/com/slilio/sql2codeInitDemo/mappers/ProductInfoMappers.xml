@@ -326,6 +326,46 @@
 	</insert>
 
 
+	<!-- 批量插入或更新 -->
+	<insert id="insertOrUpdateBatch" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
+		insert into tb_product_info(company_id,code,product_name,price,sku_type,color_type,create_time,create_date,stock,status,is_del)values
+		<foreach collection="list" item="item" separator=","  open="(" close=")">
+			#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel}
+		</foreach>
+		on DUPLICATE KEY UPDATE id = values(id),company_id = values(company_id),code = values(code),product_name = values(product_name),price = values(price),sku_type = values(sku_type),color_type = values(color_type),create_time = values(create_time),create_date = values(create_date),stock = values(stock),status = values(status),is_del = values(is_del)
+	</insert>
+
+
+	<!-- 根据 Id 查询 -->
+	<select id="selectById" resultMap="base_result_map">
+		select <include refid="base_column_list"/> from tb_product_info where id=#{id}
+	</select>
+
+	<!-- 根据 Id 删除 -->
+	<delete id="deleteById">
+		delete from tb_product_info where id=#{id}
+	</delete>
+
+	<!-- 根据 Code 查询 -->
+	<select id="selectByCode" resultMap="base_result_map">
+		select <include refid="base_column_list"/> from tb_product_info where code=#{code}
+	</select>
+
+	<!-- 根据 Code 删除 -->
+	<delete id="deleteByCode">
+		delete from tb_product_info where code=#{code}
+	</delete>
+
+	<!-- 根据 SkuTypeAndColorType 查询 -->
+	<select id="selectBySkuTypeAndColorType" resultMap="base_result_map">
+		select <include refid="base_column_list"/> from tb_product_info where sku_type=#{skuType} and color_type=#{colorType}
+	</select>
+
+	<!-- 根据 SkuTypeAndColorType 删除 -->
+	<delete id="deleteBySkuTypeAndColorType">
+		delete from tb_product_info where sku_type=#{skuType} and color_type=#{colorType}
+	</delete>
+
 
 
 </mapper>
