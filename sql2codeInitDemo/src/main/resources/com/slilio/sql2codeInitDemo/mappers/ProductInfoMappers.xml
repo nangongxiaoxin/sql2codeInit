@@ -320,8 +320,8 @@
 	<!-- 批量插入 -->
 	<insert id="insertBatch" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
 		insert into tb_product_info(company_id,code,product_name,price,sku_type,color_type,create_time,create_date,stock,status,is_del)values
-		<foreach collection="list" item="item" separator=","  open="(" close=")">
-			#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel}
+		<foreach collection="list" item="item" separator=",">
+			(#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel})
 		</foreach>
 	</insert>
 
@@ -341,6 +341,50 @@
 		select <include refid="base_column_list"/> from tb_product_info where id=#{id}
 	</select>
 
+	<!-- 根据 Id 更新 -->
+	<update id="updateById" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo" >
+		update tb_product_info
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id},
+			</if>
+			<if test="bean.company_id != null">
+				company_id = #{bean.companyId},
+			</if>
+			<if test="bean.code != null">
+				code = #{bean.code},
+			</if>
+			<if test="bean.product_name != null">
+				product_name = #{bean.productName},
+			</if>
+			<if test="bean.price != null">
+				price = #{bean.price},
+			</if>
+			<if test="bean.sku_type != null">
+				sku_type = #{bean.skuType},
+			</if>
+			<if test="bean.color_type != null">
+				color_type = #{bean.colorType},
+			</if>
+			<if test="bean.create_time != null">
+				create_time = #{bean.createTime},
+			</if>
+			<if test="bean.create_date != null">
+				create_date = #{bean.createDate},
+			</if>
+			<if test="bean.stock != null">
+				stock = #{bean.stock},
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status},
+			</if>
+			<if test="bean.is_del != null">
+				is_del = #{bean.isDel},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
 	<!-- 根据 Id 删除 -->
 	<delete id="deleteById">
 		delete from tb_product_info where id=#{id}
@@ -351,6 +395,50 @@
 		select <include refid="base_column_list"/> from tb_product_info where code=#{code}
 	</select>
 
+	<!-- 根据 Code 更新 -->
+	<update id="updateByCode" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo" >
+		update tb_product_info
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id},
+			</if>
+			<if test="bean.company_id != null">
+				company_id = #{bean.companyId},
+			</if>
+			<if test="bean.code != null">
+				code = #{bean.code},
+			</if>
+			<if test="bean.product_name != null">
+				product_name = #{bean.productName},
+			</if>
+			<if test="bean.price != null">
+				price = #{bean.price},
+			</if>
+			<if test="bean.sku_type != null">
+				sku_type = #{bean.skuType},
+			</if>
+			<if test="bean.color_type != null">
+				color_type = #{bean.colorType},
+			</if>
+			<if test="bean.create_time != null">
+				create_time = #{bean.createTime},
+			</if>
+			<if test="bean.create_date != null">
+				create_date = #{bean.createDate},
+			</if>
+			<if test="bean.stock != null">
+				stock = #{bean.stock},
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status},
+			</if>
+			<if test="bean.is_del != null">
+				is_del = #{bean.isDel},
+			</if>
+		</set>
+		where code=#{code}
+	</update>
+
 	<!-- 根据 Code 删除 -->
 	<delete id="deleteByCode">
 		delete from tb_product_info where code=#{code}
@@ -360,6 +448,50 @@
 	<select id="selectBySkuTypeAndColorType" resultMap="base_result_map">
 		select <include refid="base_column_list"/> from tb_product_info where sku_type=#{skuType} and color_type=#{colorType}
 	</select>
+
+	<!-- 根据 SkuTypeAndColorType 更新 -->
+	<update id="updateBySkuTypeAndColorType" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo" >
+		update tb_product_info
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id},
+			</if>
+			<if test="bean.company_id != null">
+				company_id = #{bean.companyId},
+			</if>
+			<if test="bean.code != null">
+				code = #{bean.code},
+			</if>
+			<if test="bean.product_name != null">
+				product_name = #{bean.productName},
+			</if>
+			<if test="bean.price != null">
+				price = #{bean.price},
+			</if>
+			<if test="bean.sku_type != null">
+				sku_type = #{bean.skuType},
+			</if>
+			<if test="bean.color_type != null">
+				color_type = #{bean.colorType},
+			</if>
+			<if test="bean.create_time != null">
+				create_time = #{bean.createTime},
+			</if>
+			<if test="bean.create_date != null">
+				create_date = #{bean.createDate},
+			</if>
+			<if test="bean.stock != null">
+				stock = #{bean.stock},
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status},
+			</if>
+			<if test="bean.is_del != null">
+				is_del = #{bean.isDel},
+			</if>
+		</set>
+		where sku_type=#{skuType} and color_type=#{colorType}
+	</update>
 
 	<!-- 根据 SkuTypeAndColorType 删除 -->
 	<delete id="deleteBySkuTypeAndColorType">

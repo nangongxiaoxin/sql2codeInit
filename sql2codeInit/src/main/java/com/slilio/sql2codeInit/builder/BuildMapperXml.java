@@ -192,13 +192,42 @@ public class BuildMapperXml {
       bw.write("\t</select>");
       bw.newLine();
 
-      //      // 更新
-      //      BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 更新");
-      //      bw.write(
-      //          "\tInteger updateBy" + methodName + " (@Param(\"bean\") T t, " + methodParams +
-      // ");");
-      //      bw.newLine();
-      //      bw.newLine();
+      // 更新
+      bw.newLine();
+      bw.write("\t<!-- 根据 " + methodName + " 更新 -->");
+      bw.newLine();
+      bw.write(
+          "\t<update id=\"updateBy"
+              + methodName
+              + "\" parameterType=\""
+              + Constants.PACKAGE_PO
+              + "."
+              + tableInfo.getBeanName()
+              + "\" >");
+      bw.newLine();
+      bw.write("\t\tupdate " + tableInfo.getTableName());
+      bw.newLine();
+      bw.write("\t\t<set>");
+      bw.newLine();
+      for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+        bw.write("\t\t\t<if test=\"bean." + fieldInfo.getFieldName() + " != null\">");
+        bw.newLine();
+        bw.write(
+            "\t\t\t\t"
+                + fieldInfo.getFieldName()
+                + " = #{bean."
+                + fieldInfo.getPropertyName()
+                + "},");
+        bw.newLine();
+        bw.write("\t\t\t</if>");
+        bw.newLine();
+      }
+      bw.write("\t\t</set>");
+      bw.newLine();
+      bw.write("\t\twhere " + paramNames);
+      bw.newLine();
+      bw.write("\t</update>");
+      bw.newLine();
 
       // 删除
       bw.newLine();
@@ -303,12 +332,11 @@ public class BuildMapperXml {
     bw.write(
         "\t\tinsert into " + tableInfo.getTableName() + "(" + insertFieldBufferStr + ")values");
     bw.newLine();
-    bw.write(
-        "\t\t<foreach collection=\"list\" item=\"item\" separator=\",\"  open=\"(\" close=\")\">");
+    bw.write("\t\t<foreach collection=\"list\" item=\"item\" separator=\",\">");
     bw.newLine();
     String insertPropertyBufferStr =
         insertPropertyBuffer.substring(0, insertPropertyBuffer.lastIndexOf(","));
-    bw.write("\t\t\t" + insertPropertyBufferStr);
+    bw.write("\t\t\t(" + insertPropertyBufferStr + ")");
     bw.newLine();
     bw.write("\t\t</foreach>");
     bw.newLine();

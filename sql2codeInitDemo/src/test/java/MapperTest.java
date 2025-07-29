@@ -3,6 +3,7 @@ import com.slilio.sql2codeInitDemo.entity.po.ProductInfo;
 import com.slilio.sql2codeInitDemo.entity.query.ProductInfoQuery;
 import com.slilio.sql2codeInitDemo.mappers.ProductInfoMappers;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
@@ -55,9 +56,29 @@ public class MapperTest {
   public void inertOrUpdateTest() {
     ProductInfo productInfo = new ProductInfo();
     productInfo.setCode("fzlMfY43Cs");
-    productInfo.setProductName("测1试");
+    productInfo.setProductName("测试");
 
     productInfoMapper.insertOrUpdate(productInfo);
+
+    System.out.println(productInfo.getId());
+  }
+
+  @Test
+  public void insertBatchTest() {
+    List<ProductInfo> productInfoList = new ArrayList<>();
+    ProductInfo productInfo = new ProductInfo();
+    productInfo.setCode("1111111");
+    productInfoList.add(productInfo);
+
+    productInfo = new ProductInfo();
+    productInfo.setCode("12311456");
+    productInfoList.add(productInfo);
+
+    productInfo = new ProductInfo();
+    productInfo.setCode("99999119");
+    productInfoList.add(productInfo);
+
+    productInfoMapper.insertBatch(productInfoList);
 
     System.out.println(productInfo.getId());
   }
