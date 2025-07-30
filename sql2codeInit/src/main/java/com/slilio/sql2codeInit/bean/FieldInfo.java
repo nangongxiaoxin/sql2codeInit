@@ -2,9 +2,10 @@ package com.slilio.sql2codeInit.bean;
 
 /** Author: slilio @CreateTime: 2025-07-12 @Description: @Version: 1.0 */
 public class FieldInfo {
-  // 字段名称
+  // 数据库字段名称
   private String fieldName;
   // bean属性
+  // java变量名字
   private String propertyName;
   private String sqlType;
   // 字段类型

@@ -68,18 +68,50 @@ public class MapperTest {
     List<ProductInfo> productInfoList = new ArrayList<>();
     ProductInfo productInfo = new ProductInfo();
     productInfo.setCode("1111111");
+    productInfo.setCreateTime(new Date());
     productInfoList.add(productInfo);
 
     productInfo = new ProductInfo();
     productInfo.setCode("12311456");
+    productInfo.setCreateTime(new Date());
     productInfoList.add(productInfo);
 
-    productInfo = new ProductInfo();
-    productInfo.setCode("99999119");
-    productInfoList.add(productInfo);
-
-    productInfoMapper.insertBatch(productInfoList);
+    productInfoMapper.insertOrUpdateBatch(productInfoList);
 
     System.out.println(productInfo.getId());
+  }
+
+  @Test
+  public void selectByKeyTest() {
+    ProductInfo productInfo = productInfoMapper.selectById(5);
+    System.out.println(productInfo);
+
+    ProductInfo productInfo1 = productInfoMapper.selectByCode("1111");
+    System.out.println(productInfo1);
+
+    ProductInfo productInfo2 = productInfoMapper.selectBySkuTypeAndColorType(3, 14);
+    System.out.println(productInfo2);
+  }
+
+  @Test
+  public void updateByKeyTest() {
+    ProductInfo productInfo = new ProductInfo();
+    productInfo.setProductName("update by 6");
+    productInfoMapper.updateById(productInfo, 6);
+
+    productInfo = new ProductInfo();
+    productInfo.setProductName("update by code");
+    productInfoMapper.updateByCode(productInfo, "1111");
+
+    productInfo = new ProductInfo();
+    productInfo.setProductName("update by 1111111 and 12311456");
+    productInfoMapper.updateBySkuTypeAndColorType(productInfo, 1, 2);
+  }
+
+  @Test
+  public void deleteByKeyTest() {
+    productInfoMapper.deleteById(33);
+    productInfoMapper.deleteByCode("1111111");
+    productInfoMapper.deleteBySkuTypeAndColorType(6, 0);
   }
 }

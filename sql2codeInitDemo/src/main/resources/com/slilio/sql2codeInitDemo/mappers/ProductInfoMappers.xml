@@ -329,8 +329,8 @@
 	<!-- 批量插入或更新 -->
 	<insert id="insertOrUpdateBatch" parameterType="com.slilio.sql2codeInitDemo.entity.po.ProductInfo">
 		insert into tb_product_info(company_id,code,product_name,price,sku_type,color_type,create_time,create_date,stock,status,is_del)values
-		<foreach collection="list" item="item" separator=","  open="(" close=")">
-			#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel}
+		<foreach collection="list" item="item" separator=",">
+			(#{item.companyId},#{item.code},#{item.productName},#{item.price},#{item.skuType},#{item.colorType},#{item.createTime},#{item.createDate},#{item.stock},#{item.status},#{item.isDel})
 		</foreach>
 		on DUPLICATE KEY UPDATE id = values(id),company_id = values(company_id),code = values(code),product_name = values(product_name),price = values(price),sku_type = values(sku_type),color_type = values(color_type),create_time = values(create_time),create_date = values(create_date),stock = values(stock),status = values(status),is_del = values(is_del)
 	</insert>
@@ -348,28 +348,28 @@
 			<if test="bean.id != null">
 				id = #{bean.id},
 			</if>
-			<if test="bean.company_id != null">
+			<if test="bean.companyId != null">
 				company_id = #{bean.companyId},
 			</if>
 			<if test="bean.code != null">
 				code = #{bean.code},
 			</if>
-			<if test="bean.product_name != null">
+			<if test="bean.productName != null">
 				product_name = #{bean.productName},
 			</if>
 			<if test="bean.price != null">
 				price = #{bean.price},
 			</if>
-			<if test="bean.sku_type != null">
+			<if test="bean.skuType != null">
 				sku_type = #{bean.skuType},
 			</if>
-			<if test="bean.color_type != null">
+			<if test="bean.colorType != null">
 				color_type = #{bean.colorType},
 			</if>
-			<if test="bean.create_time != null">
+			<if test="bean.createTime != null">
 				create_time = #{bean.createTime},
 			</if>
-			<if test="bean.create_date != null">
+			<if test="bean.createDate != null">
 				create_date = #{bean.createDate},
 			</if>
 			<if test="bean.stock != null">
@@ -378,7 +378,7 @@
 			<if test="bean.status != null">
 				status = #{bean.status},
 			</if>
-			<if test="bean.is_del != null">
+			<if test="bean.isDel != null">
 				is_del = #{bean.isDel},
 			</if>
 		</set>
@@ -402,28 +402,28 @@
 			<if test="bean.id != null">
 				id = #{bean.id},
 			</if>
-			<if test="bean.company_id != null">
+			<if test="bean.companyId != null">
 				company_id = #{bean.companyId},
 			</if>
 			<if test="bean.code != null">
 				code = #{bean.code},
 			</if>
-			<if test="bean.product_name != null">
+			<if test="bean.productName != null">
 				product_name = #{bean.productName},
 			</if>
 			<if test="bean.price != null">
 				price = #{bean.price},
 			</if>
-			<if test="bean.sku_type != null">
+			<if test="bean.skuType != null">
 				sku_type = #{bean.skuType},
 			</if>
-			<if test="bean.color_type != null">
+			<if test="bean.colorType != null">
 				color_type = #{bean.colorType},
 			</if>
-			<if test="bean.create_time != null">
+			<if test="bean.createTime != null">
 				create_time = #{bean.createTime},
 			</if>
-			<if test="bean.create_date != null">
+			<if test="bean.createDate != null">
 				create_date = #{bean.createDate},
 			</if>
 			<if test="bean.stock != null">
@@ -432,7 +432,7 @@
 			<if test="bean.status != null">
 				status = #{bean.status},
 			</if>
-			<if test="bean.is_del != null">
+			<if test="bean.isDel != null">
 				is_del = #{bean.isDel},
 			</if>
 		</set>
@@ -456,28 +456,28 @@
 			<if test="bean.id != null">
 				id = #{bean.id},
 			</if>
-			<if test="bean.company_id != null">
+			<if test="bean.companyId != null">
 				company_id = #{bean.companyId},
 			</if>
 			<if test="bean.code != null">
 				code = #{bean.code},
 			</if>
-			<if test="bean.product_name != null">
+			<if test="bean.productName != null">
 				product_name = #{bean.productName},
 			</if>
 			<if test="bean.price != null">
 				price = #{bean.price},
 			</if>
-			<if test="bean.sku_type != null">
+			<if test="bean.skuType != null">
 				sku_type = #{bean.skuType},
 			</if>
-			<if test="bean.color_type != null">
+			<if test="bean.colorType != null">
 				color_type = #{bean.colorType},
 			</if>
-			<if test="bean.create_time != null">
+			<if test="bean.createTime != null">
 				create_time = #{bean.createTime},
 			</if>
-			<if test="bean.create_date != null">
+			<if test="bean.createDate != null">
 				create_date = #{bean.createDate},
 			</if>
 			<if test="bean.stock != null">
@@ -486,7 +486,7 @@
 			<if test="bean.status != null">
 				status = #{bean.status},
 			</if>
-			<if test="bean.is_del != null">
+			<if test="bean.isDel != null">
 				is_del = #{bean.isDel},
 			</if>
 		</set>

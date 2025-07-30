@@ -210,7 +210,7 @@ public class BuildMapperXml {
       bw.write("\t\t<set>");
       bw.newLine();
       for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
-        bw.write("\t\t\t<if test=\"bean." + fieldInfo.getFieldName() + " != null\">");
+        bw.write("\t\t\t<if test=\"bean." + fieldInfo.getPropertyName() + " != null\">");
         bw.newLine();
         bw.write(
             "\t\t\t\t"
@@ -269,12 +269,11 @@ public class BuildMapperXml {
     bw.write(
         "\t\tinsert into " + tableInfo.getTableName() + "(" + insertFieldBufferStr + ")values");
     bw.newLine();
-    bw.write(
-        "\t\t<foreach collection=\"list\" item=\"item\" separator=\",\"  open=\"(\" close=\")\">");
+    bw.write("\t\t<foreach collection=\"list\" item=\"item\" separator=\",\">");
     bw.newLine();
     String insertPropertyBufferStr =
         insertPropertyBuffer.substring(0, insertPropertyBuffer.lastIndexOf(","));
-    bw.write("\t\t\t" + insertPropertyBufferStr);
+    bw.write("\t\t\t(" + insertPropertyBufferStr + ")");
     bw.newLine();
     bw.write("\t\t</foreach>");
     bw.newLine();
