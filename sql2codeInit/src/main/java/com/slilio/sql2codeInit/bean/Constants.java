@@ -30,6 +30,11 @@ public class Constants {
   public static String PACKAGE_QUERY;
   public static String PACKAGE_MAPPERS;
 
+  // service
+  public static String PACKAGE_SERVICE;
+  // service impl
+  public static String PACKAGE_SERVICE_IMPL;
+
   // 路径
   public static String PATH_BASE;
   public static String PATH_PO;
@@ -38,6 +43,8 @@ public class Constants {
   public static String PATH_QUERY;
   public static String PATH_MAPPERS;
   public static String PATH_MAPPERS_XMLS;
+  public static String PATH_SERVICE;
+  public static String PATH_SERVICE_IMPL;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -94,6 +101,14 @@ public class Constants {
     // mapper
     PACKAGE_MAPPERS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.mappers");
     PATH_MAPPERS = PATH_BASE + "/" + PACKAGE_MAPPERS.replace(".", "/");
+
+    // service
+    PACKAGE_SERVICE = PACKAGE_BASE + "." + PropertiesUtils.getString("package.service");
+    PATH_SERVICE = PATH_BASE + "/" + PACKAGE_SERVICE.replace(".", "/");
+
+    // service impl
+    PACKAGE_SERVICE_IMPL = PACKAGE_BASE + "." + PropertiesUtils.getString("package.service.impl");
+    PATH_SERVICE_IMPL = PATH_BASE + "/" + PACKAGE_SERVICE_IMPL.replace(".", "/");
 
     // mapper xml
     PATH_MAPPERS_XMLS =
