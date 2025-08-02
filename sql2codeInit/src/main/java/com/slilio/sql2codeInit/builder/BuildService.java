@@ -1,9 +1,13 @@
 package com.slilio.sql2codeInit.builder;
 
 import com.slilio.sql2codeInit.bean.Constants;
+import com.slilio.sql2codeInit.bean.FieldInfo;
 import com.slilio.sql2codeInit.bean.TableInfo;
+import com.slilio.sql2codeInit.utils.StringUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,6 +94,66 @@ public class BuildService {
               + " query);");
       bw.newLine();
       bw.newLine();
+
+      BuildComment.createFieldComment(bw, "新增");
+      bw.write("\tLong add(" + tableInfo.getBeanName() + " bean);");
+      bw.newLine();
+      bw.newLine();
+
+      BuildComment.createFieldComment(bw, "批量新增");
+      bw.write("\tLong addBatch(List<" + tableInfo.getBeanName() + "> listBean);");
+      bw.newLine();
+      bw.newLine();
+
+      BuildComment.createFieldComment(bw, "批量新增或修改");
+      bw.write("\tLong addOrUpdateBatch(List<" + tableInfo.getBeanName() + "> listBean);");
+      bw.newLine();
+      bw.newLine();
+
+      for (Map.Entry<String, List<FieldInfo>> entry : tableInfo.getKeyIndexMap().entrySet()) {
+        List<FieldInfo> keyFieldInfoList = entry.getValue();
+
+        Integer index = 0;
+        StringBuilder methodName = new StringBuilder();
+        StringBuilder methodParams = new StringBuilder();
+        for (FieldInfo fieldInfo : keyFieldInfoList) {
+          index++;
+          methodName.append(StringUtils.upperCaseFirstLetter(fieldInfo.getPropertyName()));
+          if (index < keyFieldInfoList.size()) {
+            methodName.append("And");
+          }
+
+          methodParams.append(fieldInfo.getJavaType() + " " + fieldInfo.getPropertyName());
+          if (index < keyFieldInfoList.size()) {
+            methodParams.append(", ");
+          }
+        }
+        // 查询
+        BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 查询");
+        bw.write(
+            "\t" + tableInfo.getBeanName() + " getBy" + methodName + " (" + methodParams + ");");
+        bw.newLine();
+        bw.newLine();
+
+        // 更新
+        BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 更新");
+        bw.write(
+            "\tLong updateBy"
+                + methodName
+                + " ("
+                + tableInfo.getBeanName()
+                + " bean, "
+                + methodParams
+                + ");");
+        bw.newLine();
+        bw.newLine();
+
+        // 删除
+        BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 删除");
+        bw.write("\tLong deleteBy" + methodName + " (" + methodParams + ");");
+        bw.newLine();
+        bw.newLine();
+      }
 
       // 结束
       bw.newLine();
