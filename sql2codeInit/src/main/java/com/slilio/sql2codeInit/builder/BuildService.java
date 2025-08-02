@@ -51,11 +51,44 @@ public class BuildService {
         bw.write("import " + Constants.PACKAGE_ENUMS + ".DateTimePatternEnum;");
         bw.newLine();
       }
+      bw.write("import " + Constants.PACKAGE_PO + "." + tableInfo.getBeanName() + ";");
+      bw.newLine();
+      bw.write("import " + Constants.PACKAGE_QUERY + "." + tableInfo.getBeanParamName() + ";");
+      bw.newLine();
 
       // 正文
       bw.newLine();
       BuildComment.createClassComment(bw, tableInfo.getComment() + "Service");
       bw.write("public interface " + className + " {");
+      bw.newLine();
+      bw.newLine();
+
+      BuildComment.createFieldComment(bw, "根据条件查询列表");
+      bw.write(
+          "\tList<"
+              + tableInfo.getBeanName()
+              + "> findListByParam("
+              + tableInfo.getBeanParamName()
+              + " param);");
+      bw.newLine();
+      bw.newLine();
+
+      BuildComment.createFieldComment(bw, "根据条件查询数量");
+      bw.write("\tLong findCountByParam(" + tableInfo.getBeanParamName() + " param);");
+      bw.newLine();
+      bw.newLine();
+
+      BuildComment.createFieldComment(bw, "分页查询");
+      bw.write(
+          "\tPaginationResultVO<"
+              + tableInfo.getBeanName()
+              + "> findListByPage("
+              + tableInfo.getBeanParamName()
+              + " query);");
+      bw.newLine();
+      bw.newLine();
+
+      // 结束
       bw.newLine();
       bw.write("}");
 
