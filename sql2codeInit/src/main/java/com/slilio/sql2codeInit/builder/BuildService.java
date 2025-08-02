@@ -39,21 +39,24 @@ public class BuildService {
       bw.newLine();
 
       // 导包
-
-      if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
-        bw.write(Constants.BEAN_DATE_FORMAT_CLASS + ";");
-        bw.newLine();
-        bw.write(Constants.BEAN_DATE_UNFORMAT_CLASS + ";");
-        bw.newLine();
-
-        bw.write("import " + Constants.PACKAGE_UTILS + ".DateUtils;");
-        bw.newLine();
-        bw.write("import " + Constants.PACKAGE_ENUMS + ".DateTimePatternEnum;");
-        bw.newLine();
-      }
+      //      if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
+      //        bw.write(Constants.BEAN_DATE_FORMAT_CLASS + ";");
+      //        bw.newLine();
+      //        bw.write(Constants.BEAN_DATE_UNFORMAT_CLASS + ";");
+      //        bw.newLine();
+      //
+      //        bw.write("import " + Constants.PACKAGE_UTILS + ".DateUtils;");
+      //        bw.newLine();
+      //        bw.write("import " + Constants.PACKAGE_ENUMS + ".DateTimePatternEnum;");
+      //        bw.newLine();
+      //      }
+      bw.write("import " + Constants.PACKAGE_VO + ".PaginationResultVO;");
+      bw.newLine();
       bw.write("import " + Constants.PACKAGE_PO + "." + tableInfo.getBeanName() + ";");
       bw.newLine();
       bw.write("import " + Constants.PACKAGE_QUERY + "." + tableInfo.getBeanParamName() + ";");
+      bw.newLine();
+      bw.write("import java.util.List;");
       bw.newLine();
 
       // 正文

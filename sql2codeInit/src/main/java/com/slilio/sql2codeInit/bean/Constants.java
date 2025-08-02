@@ -29,6 +29,7 @@ public class Constants {
   public static String PACKAGE_ENUMS;
   public static String PACKAGE_QUERY;
   public static String PACKAGE_MAPPERS;
+  public static String PACKAGE_VO;
 
   // service
   public static String PACKAGE_SERVICE;
@@ -45,6 +46,7 @@ public class Constants {
   public static String PATH_MAPPERS_XMLS;
   public static String PATH_SERVICE;
   public static String PATH_SERVICE_IMPL;
+  public static String PATH_VO;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -109,6 +111,10 @@ public class Constants {
     // service impl
     PACKAGE_SERVICE_IMPL = PACKAGE_BASE + "." + PropertiesUtils.getString("package.service.impl");
     PATH_SERVICE_IMPL = PATH_BASE + "/" + PACKAGE_SERVICE_IMPL.replace(".", "/");
+
+    // vo
+    PACKAGE_VO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.vo");
+    PATH_VO = PATH_BASE + "/" + PACKAGE_VO.replace(".", "/");
 
     // mapper xml
     PATH_MAPPERS_XMLS =

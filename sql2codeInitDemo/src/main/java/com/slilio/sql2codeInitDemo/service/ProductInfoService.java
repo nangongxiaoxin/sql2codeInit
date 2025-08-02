@@ -1,5 +1,6 @@
 package com.slilio.sql2codeInitDemo.service;
 
+import com.slilio.sql2codeInitDemo.entity.vo.PaginationResultVO;
 import com.slilio.sql2codeInitDemo.entity.po.ProductInfo;
 import com.slilio.sql2codeInitDemo.entity.query.ProductInfoQuery;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * @Description: 产品信息Service
  *
  * @Author: slilio
- * @CreateTime: 2025-08-02
+ * @CreateTime: 2025-08-03
  */
 public interface ProductInfoService {
 
