@@ -3,16 +3,16 @@ package com.slilio.sql2codeInitDemo.entity.query;
 import com.slilio.sql2codeInitDemo.enums.PageSize;
 
 public class SimplePage {
-  private int pageNo;
-  private int countTotal;
-  private int pageSize;
-  private int pageTotal;
-  private int start;
-  private int end;
+  private Integer pageNo;
+  private Integer countTotal;
+  private Integer pageSize;
+  private Integer pageTotal;
+  private Integer start;
+  private Integer end;
 
   public SimplePage() {}
 
-  public SimplePage(Integer pageNo, int countTotal, int pageSize) {
+  public SimplePage(Integer pageNo, Integer countTotal, Integer pageSize) {
     if (pageNo == null) {
       pageNo = 0;
     }
@@ -22,7 +22,7 @@ public class SimplePage {
     action();
   }
 
-  public SimplePage(int start, int end) {
+  public SimplePage(Integer start, Integer end) {
     this.start = start;
     this.end = end;
   }
@@ -50,52 +50,52 @@ public class SimplePage {
     this.end = this.pageSize;
   }
 
-  public int getStart() {
+  public Integer getStart() {
     return start;
   }
 
-  public int getEnd() {
+  public Integer getEnd() {
     return end;
   }
 
-  public int getPageTotal() {
+  public Integer getPageTotal() {
     return pageTotal;
   }
 
-  public int getPageNo() {
+  public Integer getPageNo() {
     return pageNo;
   }
 
-  public void setPageNo(int pageNo) {
+  public void setPageNo(Integer pageNo) {
     this.pageNo = pageNo;
   }
 
-  public void setPageTotal(int pageTotal) {
+  public void setPageTotal(Integer pageTotal) {
     this.pageTotal = pageTotal;
   }
 
-  public int getCountTotal() {
+  public Integer getCountTotal() {
     return countTotal;
   }
 
-  public int getPageSize() {
+  public Integer getPageSize() {
     return pageSize;
   }
 
-  public void setStart(int start) {
+  public void setStart(Integer start) {
     this.start = start;
   }
 
-  public void setEnd(int end) {
+  public void setEnd(Integer end) {
     this.end = end;
   }
 
-  public void setCountTotal(int countTotal) {
+  public void setCountTotal(Integer countTotal) {
     this.countTotal = countTotal;
     this.action();
   }
 
-  public void setPageSize(int pageSize) {
+  public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
   }
 }

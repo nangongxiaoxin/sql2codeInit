@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
  * @Description: 产品信息Mapper
  *
  * @Author: slilio
- * @CreateTime: 2025-08-03
+ * @CreateTime: 2025-08-04
  */
 public interface ProductInfoMapper<T, P> extends BaseMapper {
 	/**
@@ -17,12 +17,12 @@ public interface ProductInfoMapper<T, P> extends BaseMapper {
 	/**
 	 * 根据 Id 更新
 	 */
-	Long updateById (@Param("bean") T t, @Param("id") Integer id);
+	Integer updateById (@Param("bean") T t, @Param("id") Integer id);
 
 	/**
 	 * 根据 Id 删除
 	 */
-	Long deleteById (@Param("id") Integer id);
+	Integer deleteById (@Param("id") Integer id);
 
 	/**
 	 * 根据 Code 查询
@@ -32,12 +32,12 @@ public interface ProductInfoMapper<T, P> extends BaseMapper {
 	/**
 	 * 根据 Code 更新
 	 */
-	Long updateByCode (@Param("bean") T t, @Param("code") String code);
+	Integer updateByCode (@Param("bean") T t, @Param("code") String code);
 
 	/**
 	 * 根据 Code 删除
 	 */
-	Long deleteByCode (@Param("code") String code);
+	Integer deleteByCode (@Param("code") String code);
 
 	/**
 	 * 根据 SkuTypeAndColorType 查询
@@ -47,12 +47,12 @@ public interface ProductInfoMapper<T, P> extends BaseMapper {
 	/**
 	 * 根据 SkuTypeAndColorType 更新
 	 */
-	Long updateBySkuTypeAndColorType (@Param("bean") T t, @Param("skuType") Integer skuType, @Param("colorType") Integer colorType);
+	Integer updateBySkuTypeAndColorType (@Param("bean") T t, @Param("skuType") Integer skuType, @Param("colorType") Integer colorType);
 
 	/**
 	 * 根据 SkuTypeAndColorType 删除
 	 */
-	Long deleteBySkuTypeAndColorType (@Param("skuType") Integer skuType, @Param("colorType") Integer colorType);
+	Integer deleteBySkuTypeAndColorType (@Param("skuType") Integer skuType, @Param("colorType") Integer colorType);
 
 
 }

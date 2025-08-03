@@ -17,8 +17,7 @@ public class PaginationResultVO<T> {
     this.list = list;
   }
 
-  public PaginationResultVO(
-      Integer totalCount, Integer pageSize, Integer pageNo, Integer pageTotal, List<T> list) {
+  public PaginationResultVO(Integer totalCount, Integer pageSize, Integer pageNo, Integer pageTotal, List<T> list) {
     if (pageNo == 0) {
       pageNo = 1;
     }
@@ -35,11 +34,11 @@ public class PaginationResultVO<T> {
 
   public PaginationResultVO() {}
 
-  public Integer getTotalCount() {
+  public Long getTotalCount() {
     return totalCount;
   }
 
-  public void setTotalCount(Integer totalCount) {
+  public void setTotalCount(Long totalCount) {
     this.totalCount = totalCount;
   }
 

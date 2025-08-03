@@ -27,6 +27,9 @@ public class RunApplication {
 
       // Service
       BuildService.execute(tableInfo);
+
+      // ServiceImpl
+      BuildServiceImpl.execute(tableInfo);
     }
 
     // 2.生成基础类
