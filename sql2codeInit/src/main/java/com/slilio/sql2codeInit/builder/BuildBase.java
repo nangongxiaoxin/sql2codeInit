@@ -51,6 +51,12 @@ public class BuildBase {
     headerInfoList.clear();
     headerInfoList.add("package " + Constants.PACKAGE_VO);
     build(headerInfoList, "PaginationResultVO", Constants.PATH_VO);
+
+    // 生成exception
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_EXCEPTION);
+    headerInfoList.add("package " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
+    build(headerInfoList, "BusinessException", Constants.PATH_EXCEPTION);
   }
 
   private static void build(List<String> headerInfoList, String fileName, String outPutPath) {
