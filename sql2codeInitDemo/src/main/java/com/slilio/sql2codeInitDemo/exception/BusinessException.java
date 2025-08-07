@@ -1,9 +1,8 @@
 package com.slilio.sql2codeInitDemo.exception;
 
-/**
- * @Author: slilio @CreateTime: 2025-08-04 @Description: @Version: 1.0
- */
-public class BusinessException extends Exception {
+import com.slilio.sql2codeInitDemo.enums.ResponseCodeEnum;;
+
+public class BusinessException extends Exception{
 
   private ResponseCodeEnum codeEnum;
 

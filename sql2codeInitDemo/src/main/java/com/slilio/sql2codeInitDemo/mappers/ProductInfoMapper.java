@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
  * @Description: 产品信息Mapper
  *
  * @Author: slilio
- * @CreateTime: 2025-08-04
+ * @CreateTime: 2025-08-07
  */
 public interface ProductInfoMapper<T, P> extends BaseMapper {
 	/**

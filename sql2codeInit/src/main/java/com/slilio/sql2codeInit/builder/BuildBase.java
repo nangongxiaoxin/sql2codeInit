@@ -52,11 +52,21 @@ public class BuildBase {
     headerInfoList.add("package " + Constants.PACKAGE_VO);
     build(headerInfoList, "PaginationResultVO", Constants.PATH_VO);
 
+    // 生成ResponseCodeEnum
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_ENUMS);
+    build(headerInfoList, "ResponseCodeEnum", Constants.PATH_ENUMS);
+
     // 生成exception
     headerInfoList.clear();
     headerInfoList.add("package " + Constants.PACKAGE_EXCEPTION);
-    headerInfoList.add("package " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
+    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
     build(headerInfoList, "BusinessException", Constants.PATH_EXCEPTION);
+
+    //    // 生成controller
+    //    headerInfoList.clear();
+    //    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
+    //    build(headerInfoList, "BaseController", Constants.PATH_CONTROLLER);
   }
 
   private static void build(List<String> headerInfoList, String fileName, String outPutPath) {

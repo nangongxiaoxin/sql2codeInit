@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @Description: 产品信息
  *
  * @Author: slilio
- * @CreateTime: 2025-08-04
+ * @CreateTime: 2025-08-07
  */
 public class ProductInfo implements Serializable {
 	/**

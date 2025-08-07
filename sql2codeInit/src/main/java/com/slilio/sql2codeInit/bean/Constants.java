@@ -31,6 +31,7 @@ public class Constants {
   public static String PACKAGE_MAPPERS;
   public static String PACKAGE_VO;
   public static String PACKAGE_EXCEPTION;
+  public static String PACKAGE_CONTROLLER;
 
   // service
   public static String PACKAGE_SERVICE;
@@ -49,6 +50,7 @@ public class Constants {
   public static String PATH_SERVICE_IMPL;
   public static String PATH_VO;
   public static String PATH_EXCEPTION;
+  public static String PATH_CONTROLLER;
 
   // 注释
   public static String AUTHOR_COMMENT;
@@ -121,6 +123,10 @@ public class Constants {
     // exception
     PACKAGE_EXCEPTION = PACKAGE_BASE + "." + PropertiesUtils.getString("package.exception");
     PATH_EXCEPTION = PATH_BASE + "/" + PACKAGE_EXCEPTION.replace(".", "/");
+
+    // controller
+    PACKAGE_CONTROLLER = PACKAGE_BASE + "." + PropertiesUtils.getString("package.controller");
+    PATH_CONTROLLER = PATH_BASE + "/" + PACKAGE_CONTROLLER.replace(".", "/");
 
     // mapper xml
     PATH_MAPPERS_XMLS =
