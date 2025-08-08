@@ -63,10 +63,22 @@ public class BuildBase {
     headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
     build(headerInfoList, "BusinessException", Constants.PATH_EXCEPTION);
 
-    //    // 生成controller
-    //    headerInfoList.clear();
-    //    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
-    //    build(headerInfoList, "BaseController", Constants.PATH_CONTROLLER);
+    // 生成BaseController
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
+    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
+    headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO;");
+    build(headerInfoList, "ABaseController", Constants.PATH_CONTROLLER);
+
+    // 生成ResponseVO
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_VO);
+    build(headerInfoList, "ResponseVO", Constants.PATH_VO);
+
+    //        // 生成controller
+    //        headerInfoList.clear();
+    //        headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
+    //        build(headerInfoList, "BaseController", Constants.PATH_CONTROLLER);
   }
 
   private static void build(List<String> headerInfoList, String fileName, String outPutPath) {

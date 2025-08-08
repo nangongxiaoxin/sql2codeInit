@@ -9,7 +9,7 @@ import java.util.List;
  * @Description: 产品信息Service
  *
  * @Author: slilio
- * @CreateTime: 2025-08-07
+ * @CreateTime: 2025-08-08
  */
 public interface ProductInfoService {
 
