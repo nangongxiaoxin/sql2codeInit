@@ -50,17 +50,17 @@ public class BuildController {
       bw.newLine();
       bw.write("import " + Constants.PACKAGE_QUERY + "." + tableInfo.getBeanParamName() + ";");
       bw.newLine();
-      bw.write("import " + Constants.PACKAGE_QUERY + ".SimplePage;");
-      bw.newLine();
-      bw.write("import " + Constants.PACKAGE_VO + ".PaginationResultVO;");
-      bw.newLine();
-      bw.write("import " + Constants.PACKAGE_ENUMS + ".PageSize;");
+      bw.write("import " + Constants.PACKAGE_VO + ".ResponseVO;");
       bw.newLine();
       bw.write("import " + Constants.PACKAGE_SERVICE + "." + serviceName + ";");
       bw.newLine();
       bw.write("import java.util.List;");
       bw.newLine();
       bw.write("import javax.annotation.Resource;");
+      bw.newLine();
+      bw.write("import org.springframework.web.bind.annotation.RequestBody;");
+      bw.newLine();
+      bw.write("import org.springframework.web.bind.annotation.RequestMapping;");
       bw.newLine();
       bw.write("import org.springframework.web.bind.annotation.RestController;");
       bw.newLine();
@@ -70,7 +70,12 @@ public class BuildController {
       BuildComment.createClassComment(bw, tableInfo.getComment() + "Controller");
       bw.write("@RestController");
       bw.newLine();
-      bw.write("public class " + className + " {");
+      bw.write(
+          "@RequestMapping(\"/"
+              + StringUtils.lowerCaseFirstLetter(tableInfo.getBeanName())
+              + "\")");
+      bw.newLine();
+      bw.write("public class " + className + " extends ABaseController {");
       bw.newLine();
       bw.newLine();
 
@@ -79,79 +84,36 @@ public class BuildController {
       bw.newLine();
       bw.newLine();
 
-      //      BuildComment.createFieldComment(bw, "根据条件查询列表");
-      //      bw.write(
-      //          "\tpublic List<"
-      //              + tableInfo.getBeanName()
-      //              + "> findListByParam("
-      //              + tableInfo.getBeanParamName()
-      //              + " query) {");
-      //      bw.newLine();
-      //      bw.write("\t\treturn this." + serviceBeanName + ".selectList(query);");
-      //      bw.newLine();
-      //      bw.write("\t}");
-      //      bw.newLine();
-      //      bw.newLine();
-      //
-      //      BuildComment.createFieldComment(bw, "根据条件查询数量");
-      //      bw.write("\tpublic Integer findCountByParam(" + tableInfo.getBeanParamName() + "
-      // query) {");
-      //      bw.newLine();
-      //      bw.write("\t\treturn this." + serviceBeanName + ".selectCount(query);");
-      //      bw.newLine();
-      //      bw.write("\t}");
-      //      bw.newLine();
-      //      bw.newLine();
-      //
-      //      BuildComment.createFieldComment(bw, "分页查询");
-      //      bw.write(
-      //          "\tpublic PaginationResultVO<"
-      //              + tableInfo.getBeanName()
-      //              + "> findListByPage("
-      //              + tableInfo.getBeanParamName()
-      //              + " query) {");
-      //      bw.newLine();
-      //      bw.write("\t\tInteger count = this.findCountByParam(query);");
-      //      bw.newLine();
-      //      bw.write(
-      //          "\t\tInteger pageSize = query.getPageSize() == null ? PageSize.SIZE15.getSize() :
-      // query.getPageSize();");
-      //      bw.newLine();
-      //      bw.write("\t\tSimplePage page = new SimplePage(query.getPageNo(), count, pageSize);");
-      //      bw.newLine();
-      //      bw.write("\t\tquery.setSimplePage(page);");
-      //      bw.newLine();
-      //      bw.write("\t\tList<ProductInfo> list = this.findListByParam(query);");
-      //      bw.newLine();
-      //      bw.write(
-      //          "\t\tPaginationResultVO<ProductInfo> result = new PaginationResultVO(count,
-      // page.getPageSize(), page.getPageNo(), page.getPageTotal(), list);");
-      //      bw.newLine();
-      //      bw.write("\t\treturn result;");
-      //      bw.newLine();
-      //      bw.write("\t}");
-      //      bw.newLine();
-      //      bw.newLine();
+      bw.write("\t@RequestMapping(\"loadDataList\")");
+      bw.newLine();
+      bw.write("\tpublic ResponseVO loadDataList(" + tableInfo.getBeanParamName() + " query) {");
+      bw.newLine();
+      bw.write("\t\treturn getSuccessResponseVO(" + serviceBeanName + ".findListByPage(query));");
+      bw.newLine();
+      bw.write("\t}");
+      bw.newLine();
+      bw.newLine();
 
       BuildComment.createFieldComment(bw, "新增");
-      bw.write("\tpublic Integer add(" + tableInfo.getBeanName() + " bean) {");
+      bw.write("\tpublic ResponseVO add(" + tableInfo.getBeanName() + " bean) {");
       bw.newLine();
-      bw.write("\t\treturn this." + serviceBeanName + ".insert(bean);");
+      bw.write("\t\tthis." + serviceBeanName + ".add(bean);");
+      bw.newLine();
+      bw.write("\t\treturn getSuccessResponseVO(null);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
       bw.newLine();
 
       BuildComment.createFieldComment(bw, "批量新增");
-      bw.write("\tpublic Integer addBatch(List<" + tableInfo.getBeanName() + "> listBean) {");
+      bw.write(
+          "\tpublic ResponseVO addBatch(@RequestBody List<"
+              + tableInfo.getBeanName()
+              + "> listBean) {");
       bw.newLine();
-      bw.write("\t\tif (listBean == null || listBean.isEmpty()) {");
+      bw.write("\t\tthis." + serviceBeanName + ".addBatch(listBean);");
       bw.newLine();
-      bw.write("\t\t\treturn 0;");
-      bw.newLine();
-      bw.write("\t\t}");
-      bw.newLine();
-      bw.write("\t\treturn this." + serviceBeanName + ".insertBatch(listBean);");
+      bw.write("\t\treturn getSuccessResponseVO(null);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
@@ -159,15 +121,13 @@ public class BuildController {
 
       BuildComment.createFieldComment(bw, "批量新增或修改");
       bw.write(
-          "\tpublic Integer addOrUpdateBatch(List<" + tableInfo.getBeanName() + "> listBean) {");
+          "\tpublic ResponseVO addOrUpdateBatch(@RequestBody List<"
+              + tableInfo.getBeanName()
+              + "> listBean) {");
       bw.newLine();
-      bw.write("\t\tif (listBean == null || listBean.isEmpty()) {");
+      bw.write("\t\tthis." + serviceBeanName + ".addOrUpdateBatch(listBean);");
       bw.newLine();
-      bw.write("\t\t\treturn 0;");
-      bw.newLine();
-      bw.write("\t\t}");
-      bw.newLine();
-      bw.write("\t\treturn this." + serviceBeanName + ".insertOrUpdateBatch(listBean);");
+      bw.write("\t\treturn getSuccessResponseVO(null);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
@@ -197,9 +157,7 @@ public class BuildController {
         // 查询
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 查询");
         bw.write(
-            "\tpublic "
-                + tableInfo.getBeanName()
-                + " get"
+            "\tpublic ResponseVO get"
                 + tableInfo.getBeanName()
                 + "By"
                 + methodName
@@ -208,13 +166,15 @@ public class BuildController {
                 + ") {");
         bw.newLine();
         bw.write(
-            "\t\treturn this."
+            "\t\treturn getSuccessResponseVO(this."
                 + serviceBeanName
-                + ".selectBy"
+                + ".get"
+                + tableInfo.getBeanName()
+                + "By"
                 + methodName
                 + "("
                 + paramsBuilder
-                + ");");
+                + "));");
         bw.newLine();
         bw.write("\t}");
         bw.newLine();
@@ -223,7 +183,7 @@ public class BuildController {
         // 更新
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 更新");
         bw.write(
-            "\tpublic Integer update"
+            "\tpublic ResponseVO update"
                 + tableInfo.getBeanName()
                 + "By"
                 + methodName
@@ -234,13 +194,17 @@ public class BuildController {
                 + ") {");
         bw.newLine();
         bw.write(
-            "\t\treturn this."
+            "\t\tthis."
                 + serviceBeanName
-                + ".updateBy"
+                + ".update"
+                + tableInfo.getBeanName()
+                + "By"
                 + methodName
                 + "(bean, "
                 + paramsBuilder
                 + ");");
+        bw.newLine();
+        bw.write("\t\treturn getSuccessResponseVO(null);");
         bw.newLine();
         bw.write("\t}");
         bw.newLine();
@@ -249,7 +213,7 @@ public class BuildController {
         // 删除
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 删除");
         bw.write(
-            "\tpublic Integer delete"
+            "\tpublic ResponseVO delete"
                 + tableInfo.getBeanName()
                 + "By"
                 + methodName
@@ -258,13 +222,17 @@ public class BuildController {
                 + ") {");
         bw.newLine();
         bw.write(
-            "\t\treturn this."
+            "\t\tthis."
                 + serviceBeanName
-                + ".deleteBy"
+                + ".delete"
+                + tableInfo.getBeanName()
+                + "By"
                 + methodName
                 + "("
                 + paramsBuilder
                 + ");");
+        bw.newLine();
+        bw.write("\t\treturn getSuccessResponseVO(null);");
         bw.newLine();
         bw.write("\t}");
         bw.newLine();
