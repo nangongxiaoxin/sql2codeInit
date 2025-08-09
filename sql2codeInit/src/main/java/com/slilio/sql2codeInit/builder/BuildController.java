@@ -14,20 +14,21 @@ import org.slf4j.LoggerFactory;
 /**
  * @Author: slilio @CreateTime: 2025-08-03 @Description: @Version: 1.0
  */
-public class BuildServiceImpl {
-  private static final Logger logger = LoggerFactory.getLogger(BuildServiceImpl.class);
+public class BuildController {
+  private static final Logger logger = LoggerFactory.getLogger(BuildController.class);
 
   public static void execute(TableInfo tableInfo) {
-    File folder = new File(Constants.PATH_SERVICE_IMPL);
+    File folder = new File(Constants.PATH_CONTROLLER);
     if (!folder.exists()) {
       folder.mkdirs();
     }
 
-    String interfaceName = tableInfo.getBeanName() + "Service";
-    String className = tableInfo.getBeanName() + "ServiceImpl";
-    String mapperName = tableInfo.getBeanName() + Constants.SUFFIX_MAPPERS;
-    String mapperBeanName = StringUtils.lowerCaseFirstLetter(mapperName);
+    //    String interfaceName = tableInfo.getBeanName() + "Service";
+    String className = tableInfo.getBeanName() + "Controller";
     File poFile = new File(folder, className + ".java");
+
+    String serviceName = tableInfo.getBeanName() + "Service";
+    String serviceBeanName = StringUtils.lowerCaseFirstLetter(serviceName);
 
     OutputStream out = null;
     OutputStreamWriter outw = null;
@@ -41,22 +42,10 @@ public class BuildServiceImpl {
       // 文件内容正文
 
       // package
-      bw.write("package " + Constants.PACKAGE_SERVICE_IMPL + ";");
+      bw.write("package " + Constants.PACKAGE_CONTROLLER + ";");
       bw.newLine();
       bw.newLine();
 
-      // 导包
-      //      if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
-      //        bw.write(Constants.BEAN_DATE_FORMAT_CLASS + ";");
-      //        bw.newLine();
-      //        bw.write(Constants.BEAN_DATE_UNFORMAT_CLASS + ";");
-      //        bw.newLine();
-      //
-      //        bw.write("import " + Constants.PACKAGE_UTILS + ".DateUtils;");
-      //        bw.newLine();
-      //        bw.write("import " + Constants.PACKAGE_ENUMS + ".DateTimePatternEnum;");
-      //        bw.newLine();
-      //      }
       bw.write("import " + Constants.PACKAGE_PO + "." + tableInfo.getBeanName() + ";");
       bw.newLine();
       bw.write("import " + Constants.PACKAGE_QUERY + "." + tableInfo.getBeanParamName() + ";");
@@ -67,96 +56,87 @@ public class BuildServiceImpl {
       bw.newLine();
       bw.write("import " + Constants.PACKAGE_ENUMS + ".PageSize;");
       bw.newLine();
-      bw.write("import " + Constants.PACKAGE_MAPPERS + "." + mapperName + ";");
-      bw.newLine();
-      bw.write("import " + Constants.PACKAGE_SERVICE + "." + interfaceName + ";");
+      bw.write("import " + Constants.PACKAGE_SERVICE + "." + serviceName + ";");
       bw.newLine();
       bw.write("import java.util.List;");
       bw.newLine();
       bw.write("import javax.annotation.Resource;");
       bw.newLine();
-      bw.write("import org.springframework.stereotype.Service;");
+      bw.write("import org.springframework.web.bind.annotation.RestController;");
       bw.newLine();
 
-      // 正文 todo 待检查核实
+      // 正文
       bw.newLine();
-      BuildComment.createClassComment(bw, tableInfo.getComment() + "ServiceImpl");
-      //      bw.write("@Service(\"" + StringUtils.lowerCaseFirstLetter(interfaceName) + "\")");
-      bw.write("@Service(\"" + mapperBeanName + "\")");
+      BuildComment.createClassComment(bw, tableInfo.getComment() + "Controller");
+      bw.write("@RestController");
       bw.newLine();
-      bw.write("public class " + className + " implements " + interfaceName + " {");
+      bw.write("public class " + className + " {");
       bw.newLine();
       bw.newLine();
 
       // 注入
-      bw.write(
-          "\t@Resource private "
-              + mapperName
-              + "<"
-              + tableInfo.getBeanName()
-              + ","
-              + tableInfo.getBeanParamName()
-              + "> "
-              + StringUtils.lowerCaseFirstLetter(mapperName)
-              + ";");
+      bw.write("\t@Resource private " + serviceName + " " + serviceBeanName + ";");
       bw.newLine();
       bw.newLine();
 
-      BuildComment.createFieldComment(bw, "根据条件查询列表");
-      bw.write(
-          "\tpublic List<"
-              + tableInfo.getBeanName()
-              + "> findListByParam("
-              + tableInfo.getBeanParamName()
-              + " query) {");
-      bw.newLine();
-      bw.write("\t\treturn this." + mapperBeanName + ".selectList(query);");
-      bw.newLine();
-      bw.write("\t}");
-      bw.newLine();
-      bw.newLine();
-
-      BuildComment.createFieldComment(bw, "根据条件查询数量");
-      bw.write("\tpublic Integer findCountByParam(" + tableInfo.getBeanParamName() + " query) {");
-      bw.newLine();
-      bw.write("\t\treturn this." + mapperBeanName + ".selectCount(query);");
-      bw.newLine();
-      bw.write("\t}");
-      bw.newLine();
-      bw.newLine();
-
-      BuildComment.createFieldComment(bw, "分页查询");
-      bw.write(
-          "\tpublic PaginationResultVO<"
-              + tableInfo.getBeanName()
-              + "> findListByPage("
-              + tableInfo.getBeanParamName()
-              + " query) {");
-      bw.newLine();
-      bw.write("\t\tInteger count = this.findCountByParam(query);");
-      bw.newLine();
-      bw.write(
-          "\t\tInteger pageSize = query.getPageSize() == null ? PageSize.SIZE15.getSize() : query.getPageSize();");
-      bw.newLine();
-      bw.write("\t\tSimplePage page = new SimplePage(query.getPageNo(), count, pageSize);");
-      bw.newLine();
-      bw.write("\t\tquery.setSimplePage(page);");
-      bw.newLine();
-      bw.write("\t\tList<ProductInfo> list = this.findListByParam(query);");
-      bw.newLine();
-      bw.write(
-          "\t\tPaginationResultVO<ProductInfo> result = new PaginationResultVO(count, page.getPageSize(), page.getPageNo(), page.getPageTotal(), list);");
-      bw.newLine();
-      bw.write("\t\treturn result;");
-      bw.newLine();
-      bw.write("\t}");
-      bw.newLine();
-      bw.newLine();
+      //      BuildComment.createFieldComment(bw, "根据条件查询列表");
+      //      bw.write(
+      //          "\tpublic List<"
+      //              + tableInfo.getBeanName()
+      //              + "> findListByParam("
+      //              + tableInfo.getBeanParamName()
+      //              + " query) {");
+      //      bw.newLine();
+      //      bw.write("\t\treturn this." + serviceBeanName + ".selectList(query);");
+      //      bw.newLine();
+      //      bw.write("\t}");
+      //      bw.newLine();
+      //      bw.newLine();
+      //
+      //      BuildComment.createFieldComment(bw, "根据条件查询数量");
+      //      bw.write("\tpublic Integer findCountByParam(" + tableInfo.getBeanParamName() + "
+      // query) {");
+      //      bw.newLine();
+      //      bw.write("\t\treturn this." + serviceBeanName + ".selectCount(query);");
+      //      bw.newLine();
+      //      bw.write("\t}");
+      //      bw.newLine();
+      //      bw.newLine();
+      //
+      //      BuildComment.createFieldComment(bw, "分页查询");
+      //      bw.write(
+      //          "\tpublic PaginationResultVO<"
+      //              + tableInfo.getBeanName()
+      //              + "> findListByPage("
+      //              + tableInfo.getBeanParamName()
+      //              + " query) {");
+      //      bw.newLine();
+      //      bw.write("\t\tInteger count = this.findCountByParam(query);");
+      //      bw.newLine();
+      //      bw.write(
+      //          "\t\tInteger pageSize = query.getPageSize() == null ? PageSize.SIZE15.getSize() :
+      // query.getPageSize();");
+      //      bw.newLine();
+      //      bw.write("\t\tSimplePage page = new SimplePage(query.getPageNo(), count, pageSize);");
+      //      bw.newLine();
+      //      bw.write("\t\tquery.setSimplePage(page);");
+      //      bw.newLine();
+      //      bw.write("\t\tList<ProductInfo> list = this.findListByParam(query);");
+      //      bw.newLine();
+      //      bw.write(
+      //          "\t\tPaginationResultVO<ProductInfo> result = new PaginationResultVO(count,
+      // page.getPageSize(), page.getPageNo(), page.getPageTotal(), list);");
+      //      bw.newLine();
+      //      bw.write("\t\treturn result;");
+      //      bw.newLine();
+      //      bw.write("\t}");
+      //      bw.newLine();
+      //      bw.newLine();
 
       BuildComment.createFieldComment(bw, "新增");
       bw.write("\tpublic Integer add(" + tableInfo.getBeanName() + " bean) {");
       bw.newLine();
-      bw.write("\t\treturn this." + mapperBeanName + ".insert(bean);");
+      bw.write("\t\treturn this." + serviceBeanName + ".insert(bean);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
@@ -171,7 +151,7 @@ public class BuildServiceImpl {
       bw.newLine();
       bw.write("\t\t}");
       bw.newLine();
-      bw.write("\t\treturn this." + mapperBeanName + ".insertBatch(listBean);");
+      bw.write("\t\treturn this." + serviceBeanName + ".insertBatch(listBean);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
@@ -187,7 +167,7 @@ public class BuildServiceImpl {
       bw.newLine();
       bw.write("\t\t}");
       bw.newLine();
-      bw.write("\t\treturn this." + mapperBeanName + ".insertOrUpdateBatch(listBean);");
+      bw.write("\t\treturn this." + serviceBeanName + ".insertOrUpdateBatch(listBean);");
       bw.newLine();
       bw.write("\t}");
       bw.newLine();
@@ -229,7 +209,7 @@ public class BuildServiceImpl {
         bw.newLine();
         bw.write(
             "\t\treturn this."
-                + mapperBeanName
+                + serviceBeanName
                 + ".selectBy"
                 + methodName
                 + "("
@@ -255,7 +235,7 @@ public class BuildServiceImpl {
         bw.newLine();
         bw.write(
             "\t\treturn this."
-                + mapperBeanName
+                + serviceBeanName
                 + ".updateBy"
                 + methodName
                 + "(bean, "
@@ -279,7 +259,7 @@ public class BuildServiceImpl {
         bw.newLine();
         bw.write(
             "\t\treturn this."
-                + mapperBeanName
+                + serviceBeanName
                 + ".deleteBy"
                 + methodName
                 + "("

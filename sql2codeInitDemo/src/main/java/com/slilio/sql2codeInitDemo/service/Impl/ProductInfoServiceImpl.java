@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
  * @Description: 产品信息ServiceImpl
  *
  * @Author: slilio
- * @CreateTime: 2025-08-08
+ * @CreateTime: 2025-08-09
  */
-@Service("productInfoService")
+@Service("productInfoMapper")
 public class ProductInfoServiceImpl implements ProductInfoService {
 
 	@Resource private ProductInfoMapper<ProductInfo,ProductInfoQuery> productInfoMapper;

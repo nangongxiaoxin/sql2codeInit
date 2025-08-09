@@ -60,20 +60,28 @@ public class BuildBase {
     // 生成exception
     headerInfoList.clear();
     headerInfoList.add("package " + Constants.PACKAGE_EXCEPTION);
-    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
+    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum");
     build(headerInfoList, "BusinessException", Constants.PATH_EXCEPTION);
-
-    // 生成BaseController
-    headerInfoList.clear();
-    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
-    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum;");
-    headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO;");
-    build(headerInfoList, "ABaseController", Constants.PATH_CONTROLLER);
 
     // 生成ResponseVO
     headerInfoList.clear();
     headerInfoList.add("package " + Constants.PACKAGE_VO);
     build(headerInfoList, "ResponseVO", Constants.PATH_VO);
+
+    // 生成BaseController
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
+    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum");
+    headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO");
+    build(headerInfoList, "ABaseController", Constants.PATH_CONTROLLER);
+
+    // 生成AGlobalExceptionHandlerController
+    headerInfoList.clear();
+    headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER);
+    headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO");
+    headerInfoList.add("import " + Constants.PACKAGE_ENUMS + ".ResponseCodeEnum");
+    headerInfoList.add("import " + Constants.PACKAGE_EXCEPTION + ".BusinessException ");
+    build(headerInfoList, "AGlobalExceptionHandlerController", Constants.PATH_CONTROLLER);
 
     //        // 生成controller
     //        headerInfoList.clear();

@@ -1,6 +1,6 @@
 package com.slilio.sql2codeInitDemo.exception;
 
-import com.slilio.sql2codeInitDemo.enums.ResponseCodeEnum;;
+import com.slilio.sql2codeInitDemo.enums.ResponseCodeEnum;
 
 public class BusinessException extends Exception{
 

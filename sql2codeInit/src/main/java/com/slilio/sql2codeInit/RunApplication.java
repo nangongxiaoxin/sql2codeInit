@@ -30,6 +30,9 @@ public class RunApplication {
 
       // ServiceImpl
       BuildServiceImpl.execute(tableInfo);
+
+      // Controller
+      BuildController.execute(tableInfo);
     }
 
     // 2.生成基础类

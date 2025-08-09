@@ -1,8 +1,8 @@
 package com.slilio.sql2codeInitDemo.controller;
 
-import com.slilio.sql2codeInitDemo.enums.ResponseCodeEnum;;
+import com.slilio.sql2codeInitDemo.enums.ResponseCodeEnum;
 
-import com.slilio.sql2codeInitDemo.entity.vo.ResponseVO;;
+import com.slilio.sql2codeInitDemo.entity.vo.ResponseVO;
 
 public class ABaseController {
 
