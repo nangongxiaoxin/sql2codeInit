@@ -8,6 +8,7 @@ public class ABaseController {
     responseVO.setStatus(STATUS_SUCCESS);
     responseVO.setCode(ResponseCodeEnum.CODE_200.getCode());
     responseVO.setInfo(ResponseCodeEnum.CODE_200.getMsg());
+    responseVO.setData(t);
     return responseVO;
   }
 }

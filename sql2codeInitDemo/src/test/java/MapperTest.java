@@ -1,7 +1,7 @@
 import com.slilio.sql2codeInitDemo.RunDemoApplication;
 import com.slilio.sql2codeInitDemo.entity.po.ProductInfo;
 import com.slilio.sql2codeInitDemo.entity.query.ProductInfoQuery;
-import com.slilio.sql2codeInitDemo.mappers.ProductInfoMappers;
+import com.slilio.sql2codeInitDemo.mappers.ProductInfoMapper;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = RunDemoApplication.class)
 @RunWith(SpringRunner.class)
 public class MapperTest {
-  @Resource private ProductInfoMappers<ProductInfo, ProductInfoQuery> productInfoMapper;
+  @Resource private ProductInfoMapper<ProductInfo, ProductInfoQuery> productInfoMapper;
 
   @Test
   public void mapTest() throws ParseException {
@@ -34,7 +34,7 @@ public class MapperTest {
       System.out.println(productInfo);
     }
 
-    Long count = productInfoMapper.selectCount(query);
+    Integer count = productInfoMapper.selectCount(query);
     System.out.println(count);
   }
 

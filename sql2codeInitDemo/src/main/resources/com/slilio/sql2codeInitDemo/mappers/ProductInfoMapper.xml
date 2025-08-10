@@ -118,7 +118,7 @@
 
 
 	<!-- 查询数量 -->
-	<select id="selectCount" resultType="java.lang.Long">
+	<select id="selectCount" resultType="java.lang.Integer">
 		select count(1) from tb_product_info <include refid="query_condition"/>
 	</select>
 

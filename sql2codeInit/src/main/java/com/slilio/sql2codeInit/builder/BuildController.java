@@ -84,7 +84,7 @@ public class BuildController {
       bw.newLine();
       bw.newLine();
 
-      bw.write("\t@RequestMapping(\"loadDataList\")");
+      bw.write("\t@RequestMapping(\"/loadDataList\")");
       bw.newLine();
       bw.write("\tpublic ResponseVO loadDataList(" + tableInfo.getBeanParamName() + " query) {");
       bw.newLine();
@@ -95,6 +95,9 @@ public class BuildController {
       bw.newLine();
 
       BuildComment.createFieldComment(bw, "新增");
+      bw.newLine();
+      bw.write("\t@RequestMapping(\"/add\")");
+      bw.newLine();
       bw.write("\tpublic ResponseVO add(" + tableInfo.getBeanName() + " bean) {");
       bw.newLine();
       bw.write("\t\tthis." + serviceBeanName + ".add(bean);");
@@ -106,6 +109,9 @@ public class BuildController {
       bw.newLine();
 
       BuildComment.createFieldComment(bw, "批量新增");
+      bw.newLine();
+      bw.write("\t@RequestMapping(\"/addBatch\")");
+      bw.newLine();
       bw.write(
           "\tpublic ResponseVO addBatch(@RequestBody List<"
               + tableInfo.getBeanName()
@@ -120,6 +126,9 @@ public class BuildController {
       bw.newLine();
 
       BuildComment.createFieldComment(bw, "批量新增或修改");
+      bw.newLine();
+      bw.write("\t@RequestMapping(\"/addOrUpdateBatch\")");
+      bw.newLine();
       bw.write(
           "\tpublic ResponseVO addOrUpdateBatch(@RequestBody List<"
               + tableInfo.getBeanName()
@@ -154,16 +163,14 @@ public class BuildController {
             paramsBuilder.append(", ");
           }
         }
+
         // 查询
+        String methodNameRequest = "get" + tableInfo.getBeanName() + "By" + methodName;
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 查询");
-        bw.write(
-            "\tpublic ResponseVO get"
-                + tableInfo.getBeanName()
-                + "By"
-                + methodName
-                + " ("
-                + methodParams
-                + ") {");
+        bw.newLine();
+        bw.write("\t@RequestMapping(\"/" + methodNameRequest + "\")");
+        bw.newLine();
+        bw.write("\tpublic ResponseVO " + methodNameRequest + " (" + methodParams + ") {");
         bw.newLine();
         bw.write(
             "\t\treturn getSuccessResponseVO(this."
@@ -181,12 +188,14 @@ public class BuildController {
         bw.newLine();
 
         // 更新
+        methodNameRequest = "update" + tableInfo.getBeanName() + "By" + methodName;
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 更新");
+        bw.newLine();
+        bw.write("\t@RequestMapping(\"/" + methodNameRequest + "\")");
+        bw.newLine();
         bw.write(
-            "\tpublic ResponseVO update"
-                + tableInfo.getBeanName()
-                + "By"
-                + methodName
+            "\tpublic ResponseVO "
+                + methodNameRequest
                 + " ("
                 + tableInfo.getBeanName()
                 + " bean, "
@@ -211,15 +220,12 @@ public class BuildController {
         bw.newLine();
 
         // 删除
+        methodNameRequest = "delete" + tableInfo.getBeanName() + "By" + methodName;
         BuildComment.createMapperMethodComment(bw, "根据 " + methodName + " 删除");
-        bw.write(
-            "\tpublic ResponseVO delete"
-                + tableInfo.getBeanName()
-                + "By"
-                + methodName
-                + " ("
-                + methodParams
-                + ") {");
+        bw.newLine();
+        bw.write("\t@RequestMapping(\"/" + methodNameRequest + "\")");
+        bw.newLine();
+        bw.write("\tpublic ResponseVO " + methodNameRequest + " (" + methodParams + ") {");
         bw.newLine();
         bw.write(
             "\t\tthis."

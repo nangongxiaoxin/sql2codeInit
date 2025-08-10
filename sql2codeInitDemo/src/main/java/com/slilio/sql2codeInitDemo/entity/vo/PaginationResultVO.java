@@ -34,11 +34,11 @@ public class PaginationResultVO<T> {
 
   public PaginationResultVO() {}
 
-  public Long getTotalCount() {
+  public Integer getTotalCount() {
     return totalCount;
   }
 
-  public void setTotalCount(Long totalCount) {
+  public void setTotalCount(Integer totalCount) {
     this.totalCount = totalCount;
   }
 

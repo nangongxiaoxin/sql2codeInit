@@ -81,8 +81,8 @@ public class BuildServiceImpl {
       // 正文 todo 待检查核实
       bw.newLine();
       BuildComment.createClassComment(bw, tableInfo.getComment() + "ServiceImpl");
-      //      bw.write("@Service(\"" + StringUtils.lowerCaseFirstLetter(interfaceName) + "\")");
-      bw.write("@Service(\"" + mapperBeanName + "\")");
+      bw.write(
+          "@Service(\"" + StringUtils.lowerCaseFirstLetter(tableInfo.getBeanName()) + "Service\")");
       bw.newLine();
       bw.write("public class " + className + " implements " + interfaceName + " {");
       bw.newLine();
